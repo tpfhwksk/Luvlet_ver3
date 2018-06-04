@@ -6,6 +6,13 @@ public class User {
 	private String userName;
 	private String userGender;
 	private String userEmail;
+	private String userBirthday;
+	public String getUserBirthday() {
+		return userBirthday;
+	}
+	public void setUserBirthday(String userBirthday) {
+		this.userBirthday = userBirthday;
+	}
 	public String getUserID() {
 		return userID;
 	}

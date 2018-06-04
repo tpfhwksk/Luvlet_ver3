@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import user.User;
+
 public class BbsDAO {
 	private Connection conn;
 	private ResultSet rs;
@@ -71,7 +73,7 @@ public class BbsDAO {
 		return -1; // 데이터베이스 오류
 	}
 	
-	public ArrayList<Bbs> getList(int pageNumber) {
+	public ArrayList<Bbs> getList(int pageNumber) { //여기서 타이틀 받으면.. 
 		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10"; 
 		//내림차순
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
@@ -94,9 +96,25 @@ public class BbsDAO {
 		}
 		return list; 
 	}
-	
+	public void countNum(){ // count number of tables we have in 'LUVLET' db. (to count number of suvey)
+		String SQL = "SELECT count(*) from information_schema.tables WHERE table_schema = 'LUVLET'";
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				System.out.println(rs.getInt(1));
+				return; 
+			}
+		
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return;
+		
+	}
 	public boolean nextPage(int pageNumber) {
 		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1"; 
+		
 		//내림차순
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);

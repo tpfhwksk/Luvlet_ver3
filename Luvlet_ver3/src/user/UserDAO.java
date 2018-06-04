@@ -12,7 +12,7 @@ public class UserDAO {
 	
 	public UserDAO() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/BBS";
+			String dbURL = "jdbc:mysql://localhost:3306/LUVLET";
 			String dbID = "root";
 			String dbPassword = "dbzla8426";
 			Class.forName("com.mysql.jdbc.Driver");
@@ -45,7 +45,7 @@ public class UserDAO {
 	}
 	
 	public int join(User user) {
-		String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1,  user.getUserID());
@@ -53,6 +53,7 @@ public class UserDAO {
 			pstmt.setString(3,  user.getUserName());
 			pstmt.setString(4,  user.getUserGender());
 			pstmt.setString(5,  user.getUserEmail());
+			pstmt.setString(6,  user.getUserBirthday());
 			return pstmt.executeUpdate(); // 성공시 0 이상 숫자 리턴
 		} catch (Exception e){
 			e.printStackTrace();

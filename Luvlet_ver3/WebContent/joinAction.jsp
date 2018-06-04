@@ -10,6 +10,7 @@
 <jsp:setProperty name="user" property="userName"/>
 <jsp:setProperty name="user" property="userGender"/>
 <jsp:setProperty name="user" property="userEmail"/>
+<jsp:setProperty name="user" property="userBirthday"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 		}
 		if (user.getUserID() == null || user.getUserPassword() == null 
 		|| user.getUserName() == null || user.getUserGender() == null 
-		|| user.getUserEmail() == null) {
+		|| user.getUserEmail() == null || user.getUserBirthday() == null) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('입력이 안 된 사항이 있습니다.')");
