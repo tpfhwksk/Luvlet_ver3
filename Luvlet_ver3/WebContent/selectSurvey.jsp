@@ -145,16 +145,34 @@
 	<div class="container">
 	
 		<div class="buttons" align="center">
-          <button id="btn0"><span id="choice0">SCL-90</span></button>
-          <button id="btn1"><span id="choice1">survey2</span></button>
-          <button id="btn2"><span id="choice2">survey3</span></button>
-          <button id="btn3"><span id="choice3">survey4</span></button>
-          <button id="btn4"><span id="choice4">survey5</span></button>
-          <button id="btn4"><span id="choice4">survey6</span></button>
+		<form method="post" action="Survey.jsp">
+		<!-- value에 다른 페이지로 보낼 값 설정 가능 -->
+          	<button name="title" id="title" value="aa"><span name="title" id="title">SCL-90</span></button>
+         	 <button id="btn1"><span id="choice1">survey2</span></button>
+         	 <button id="btn2"><span id="choice2">survey3</span></button>
+         	 <button id="btn3"><span id="choice3">survey4</span></button>
+         	 <button id="btn4"><span id="choice4">survey5</span></button>
+         	 
+         </form>
+          <button id="addSurveyBtn"><span id="choice4">+</span></button>
         </div>
 			
 	</div>
+	<% String my="http://test.com"; %>
+	<script>
+	var myhome = "<%=my%>";
+	//alert(myhome);
+	</script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
+	 <script>
+   		 var addBtn = document.getElementById("addSurveyBtn");
+
+   		 addBtn.onclick = function() {
+  			 location.href = "addNewSurvey.jsp";
+  		 }
+  		 
+   		 
+    </script>
 </body>
 </html>

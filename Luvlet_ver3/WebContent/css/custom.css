@@ -7,7 +7,7 @@ h1 {
 	font-family : 'Hanna';
 }
 
-#btn0, #btn1, #btn2, #btn3, #btn4, #btn5{
+#btn0, #btn1, #btn2, #btn3, #btn4, #btn5, #addSurveyBtn{
   background-color: #778897;
   width: 200px;
   height: 150px;
@@ -20,11 +20,11 @@ h1 {
   padding: 10px 10px;
 }
 
-#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover, #btn4:hover, #btn5:hover, #startBtn:hover, #localBtn:hover, #fileBtn:hover {
+#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover, #btn4:hover, #btn5:hover, #addSurveyBtn:hover, #startBtn:hover, #localBtn:hover, #fileBtn:hover {
   cursor: pointer;
   background-color: #57636e;
 }
 
-#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus, #btn4:focus, #btn5:hover, #startBtn:focus, #backBtn:focus {
+#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus, #btn4:focus, #btn5:focus, #addSurveyBtn:focus, #startBtn:focus, #backBtn:focus {
   outline: 0;
 }
