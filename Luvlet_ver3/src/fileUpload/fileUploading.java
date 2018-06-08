@@ -104,16 +104,19 @@ public class fileUploading {
 	         SurveyDAO surveydao = new SurveyDAO();
 	         int result = surveydao.writeTitle(s_title); // 제목 데이터베이스 surveytitle 테이블에 따로 넣기
 	         if(result == -1){
-	        	System.out.println("write failed");
+	        	System.out.println("writeTitle failed");
 	        	return -1; // 
 	         }
 	         
 	         
 	         System.out.println(survey.get(0).getSurveyContent());
 	         System.out.println("문항 수 : " + survey.get(0).getSurveyType());
-	         
-	         
-	         
+	        
+	         result = surveydao.write(s_title, 0, survey.get(0).getSurveyContent(), survey.get(0).getSurveyType()); // 세부사항 첫번째 인덱스에 넣기
+	         if(result == -1){
+	        	System.out.println("write First element failed");
+	        	return -1; // 
+	         }
 	         
 	         for (int i = 1; i < survey.size(); i++) {
 
@@ -125,12 +128,28 @@ public class fileUploading {
 	               System.out.print("  복수 : " + tmp.getSurveyMultiple());
 	               System.out.print("  세부 : " + tmp.getSurveyDetail());
 	               System.out.println();
+	               
+	               int writeResult = surveydao.write(s_title, i, tmp.getSurveyContent(), tmp.getSurveyType(), tmp.getSurveyScale(), tmp.getSurveyMultiple(), tmp.getSurveyDetail(), 1);
+	               if(writeResult == -1){
+	            	   System.out.println("write survey item1 failed!");
+	               }
+	               
+	               
 	            } else {
 	               System.out.print("문제a : " + tmp.getSurveyContent());
 	               System.out.print("  타입 : " + tmp.getSurveyType());
 	               System.out.println();
+	               
+	               int writeResult = surveydao.write(s_title, i, tmp.getSurveyContent(), tmp.getSurveyType());
+	               if(writeResult == -1){
+	            	   System.out.println("write survey item2 failed!");
+	               }
 	            }
 	         }
+	        /* int orderResult = surveydao.ordering(s_title);
+	         if(orderResult == -1){
+	        	 System.out.println("ordering failed");
+	         }*/ // 나중에 데이터 retrieve할때 쓰셈 
 	         in.close();
 	         System.out.println(survey.size());
 	      } catch (FileNotFoundException e) {
