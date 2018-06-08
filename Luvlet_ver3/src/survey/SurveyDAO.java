@@ -168,7 +168,7 @@ public class SurveyDAO {
 	}
 	
 	public ArrayList<String> getTitleList() { //여기서 타이틀 받으면.. 
-		String SQL = "SELECT * FROM surveytitle WHERE titleAvailable = 1 ORDER BY titlenum DESC"; 
+		String SQL = "SELECT * FROM surveytitle WHERE titleAvailable = 1 ORDER BY titlenum ASC"; 
 		//내림차순
 		ArrayList<String> list = new ArrayList<String>();
 		try {
