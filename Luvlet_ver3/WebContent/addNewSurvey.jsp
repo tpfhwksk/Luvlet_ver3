@@ -74,9 +74,11 @@
 		</div>
 	</nav>
 	<form action="fileUpload.jsp" method="post" enctype="multipart/form-data">
-		<p id="question" align="center">첨부할 파일을 업로드 하십시오</p>
+		<h1 id="question" align="center">첨부할 파일을 업로드 하십시오</h1>
+		<br>
         	<div align="center">
         		<input type="file" name="file"/>
+        		<br>
         		<input type="submit" value="전송"/>
         	</div>
 	</form>

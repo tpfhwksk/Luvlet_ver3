@@ -26,7 +26,7 @@
 	
 </script>
 
-<title>JSP 게시판 웹 사이트</title>
+<title>LUVLET</title>
 </head>
 
 <body>
@@ -39,7 +39,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>	
 			</button>
-			<a class="navbar-brand" href="main.jsp">JSP 게시판 웹 사이트</a>
+			<a class="navbar-brand" href="selectSurvey.jsp">LUVLET</a>
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
@@ -64,7 +64,7 @@
 		<div class="col-lg-4">
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form method="post" action="joinAction.jsp">
-					<h3 style="text-align: center;">회원가입 화면</h3>
+					<h3 style="text-align: center;">회원가입</h3>
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="아이디" NAME="userID" maxlength="20">	
 					</div>

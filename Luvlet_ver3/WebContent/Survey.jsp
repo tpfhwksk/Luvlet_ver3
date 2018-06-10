@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
+<%@ page import="java.io.*"%>
 <%@ page import="survey.surveyTitle" %>
 <%@ page import="survey.SurveyDAO" %>
 <%@ page import="survey.Survey" %>
@@ -49,7 +50,7 @@ var questions = [];
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="main.jsp">Luvlet</a>
+			<a class="navbar-brand" href="selectSurvey.jsp">Luvlet</a>
 		</div>
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
@@ -174,7 +175,7 @@ var questions = [];
 			  surveyHTML += "</div>";
 			          
 			  surveyHTML += "<div id='backAndmultiBtn'>";
-			  surveyHTML += "<button id=\"backBtn\"><span>이전 문항</span></button>";
+			 
 			  surveyHTML += "</div>";      	
 			  
 			  surveyHTML += "<hr style=\"margin-top: 50px\">";
@@ -243,6 +244,7 @@ var questions = [];
 				}
    		  		else{
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+   		  			
    		  		}
    		  		
    		    }
@@ -256,8 +258,15 @@ var questions = [];
 				surveyHTML += '<button id="btn0"><span id="choice0">다음 문항</span></button>';
 				surveyHTML += '</form>'
 				document.getElementById("buttons").innerHTML = surveyHTML;
+				
 				guess("btn0", 0);
-   		    }
+				if(questionIndex != 1){
+					document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+				}
+				else{
+					document.getElementById("backAndmultiBtn").innerHTML = "";
+				}
+			}
    			//surveyHTML += '<button name="title" id="title" value="subjective' +  questions[questionIndex-1].num + '><span>작성완료</span></button>';
    		    backButton();
    		    showProgress();
@@ -395,18 +404,75 @@ var questions = [];
    		}
 
 
-
+		function mainLink(){
+			location.href = "selectSurvey.jsp";
+		}
+   		
    		function showScores() {
-   		  var gameOverHtml = "<h1>Result</h1>";
+   		  var gameOverHtml = "<h1>설문조사가 모두 끝났습니다.</h1>";
    		  var sum = 0;
    		  //alert(quiz.choiceArray);
    		  for(var i = 0; i < choiceArray.length; i++){
    			  sum += choiceArray[i];
    		  }
-   		  gameOverHtml += "<h2 id='score'>End. Thank you</h2>";
+   		  gameOverHtml += "<h2 id='score'>Thank you</h2>";
+   			gameOverHtml += "<button id='btn0' onclick='mainLink()'>돌아가기</h2>";
    		  document.getElementById("survey").innerHTML = gameOverHtml;
+   		  
+   		  
+   		
+   		  var path = "C:\\16OODP\\eclipse\\workspace_copy\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Luvlet\\surveyResult\\";
+   		  makeFile(path);
+   		  var saveResult = saveFile(path, choiceArray, true);
+   		}
+   		
+   		function saveFile(path, content, bool){
+   			try{
+   				
+   				var file = new java.io.File(path);
+   				if(!file.exists()){
+   					return null;
+   				}
+   				var fw = new java.io.FileWriter(file,bool);
+   				var bw = new java.io.BufferedWriter(fw);
+   				var str = new java.lang.String(content);
+   				bw.write(str);
+   				bw.close();
+   				fw.close();
+   			} catch(e){
+   				clientMessage(e);
+   			}
    		}
 
+   		function makeFolder(path){
+   			try{
+   				var file = new java.io.File(path);
+   				if(!file.exists()){
+   					file.mkdir();
+   					print(" " +path+" 으로 디렉토리 생성 완료");}
+   				else{}
+   			}
+   			catch(e){
+   				clientMessage(e);
+   			}
+   		}
+   		
+   		function makeFile(path){
+   			try {
+   				var file = new java.io.File(path);
+   				alert("dddd");	
+   				if(file.createNewFile()){
+   					clientMessage(" " + path + " 으로 파일 생성 완료");
+   					//alert("dddd");	
+   				}
+   				else {}
+   				
+   			} catch(e) {
+   				clientmessage(e);
+   			
+   			}
+   		}
+   		
    </script>
 </body>
 </html>
