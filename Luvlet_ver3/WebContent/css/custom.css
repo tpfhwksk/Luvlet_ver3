@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400);
 * {
 	font-family : 'Nanum Gothic';
 }
@@ -23,11 +24,85 @@ h3 {
   font-size: 15px;
   color: #fff;
   border: 1px solid #1d3c6a;
-  /* border-radius: 5px; */
-        /* ÁÂ           ¿ì          À§         ¾Æ·¡ */
+      	/* ÁÂ    ¿ì          À§         ¾Æ·¡*/
   margin: 10px 25px 30px 0px;
   padding: 10px 10px;
 }
+
+/* #btn0, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #btn7, #btn8, #btn9, #btn10, #btn11, #startBtn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 auto;
+  width: 70px;
+  height: 70px;
+  font-size: 52px;
+  transition: all 0.4s ease-in;
+  &:before {
+    content: '';
+    background-color: aliceblue;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: scale(0.001, 0.001);
+  }
+  
+  &:active {
+  background-color: #778897;
+    outline: 0;
+    color: #fff;
+  }
+} */
+/* .buttons {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 auto;
+  width: 70px;
+  height: 70px;
+  font-size: 52px;
+  transition: all 0.4s ease-in;
+  &:before {
+    content: '';
+    background-color: aliceblue;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: scale(0.001, 0.001);
+  }
+  &:focus {
+    outline: 0;
+    color: #fff;
+    &:before {
+      animation: effect_dylan 0.8s ease-out;
+    }
+  } 
+  
+ @keyframes effect_dylan {
+  50% {
+    transform: scale(1.5, 1.5);
+    opacity: 0;
+  }
+  99% {
+    transform: scale(0.001, 0.001);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.001, 0.001);
+    opacity: 1;
+  }
+}
+  
+}*/
+
 
 #backBtn {
   background-color: #EAEAEA;
@@ -35,7 +110,17 @@ h3 {
   height: 50px;
   font-size: 14px;
   border: 1px solid #1d3c6a;
-  margin: 10px 1px 20px 0px;
+  margin: 10px 500px 20px 0px;
+  padding: 10px 10px;
+}
+
+#multipleBtn {
+  background-color: #EAEAEA;
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  border: 1px solid #1d3c6a;
+  margin: 10px 0px 20px 0px;
   padding: 10px 10px;
 }
 
@@ -60,3 +145,7 @@ h3 {
 #btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus, #btn4:focus, #btn5:focus, #btn6:focus, #btn7:focus, #btn8:focus, #btn9:focus, #btn10:focus, #btn11:focus, #addSurveyBtn:focus, #startBtn:focus, #backBtn:focus, #title:focus {
   outline: 0;
 }
+
+
+
+

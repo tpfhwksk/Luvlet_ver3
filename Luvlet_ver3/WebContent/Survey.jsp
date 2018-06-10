@@ -157,6 +157,7 @@ var questions = [];
 		var choiceArray = [];
 		var score = 0;
    		 var startBtn = document.getElementById("startBtn");
+   		 var mChoicesList = [];
 
    		 startBtn.onclick = function() {
    		  	var surveyHTML = "<h1 align=\"center\">" + "<%=surveytitle.getTitle()%>" + "</h1>";
@@ -172,8 +173,10 @@ var questions = [];
 			  surveyHTML += "	<button id=\"btn4\"><span id=\"choice4\"></span></button>";
 			  surveyHTML += "</div>";
 			          
+			  surveyHTML += "<div id='backAndmultiBtn'>";
 			  surveyHTML += "<button id=\"backBtn\"><span>이전 문항</span></button>";
-			        	
+			  surveyHTML += "</div>";      	
+			  
 			  surveyHTML += "<hr style=\"margin-top: 50px\">";
 			  surveyHTML += "<footer>";
 			  surveyHTML += "	<p id=\"progress\">Question x of y.</p>";
@@ -191,12 +194,16 @@ var questions = [];
    			var x=1;
    			var summ = questionIndex-x;
    		  if(questions.length === summ){
+   			  href = "surveyResult";
    		    showScores();
    		    
    		  }
    		  else {
    		    //show question
-   		    document.getElementById("question").innerHTML=questions[questionIndex-1].content;
+   		    document.getElementById("question").innerHTML = questions[questionIndex-1].content;
+   		 	if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
+   		 		document.getElementById("question").innerHTML += ' (중복 선택이 가능합니다.)';
+			}
 
    		    //show choices
    		    //var choices = quiz.getQuestionIndex().choices;
@@ -205,9 +212,15 @@ var questions = [];
    		  		var surveyHTML = " ";
    		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
-   		  			surveyHTML += "<button id=\"btn" + i + "\"><span id=\"choice" + i + "\"></span></button>";
+   		  			if(1 === questions[questionIndex-1].multiple){
+   		  				
+   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" ><span id=\"choice" + i + "\"></span></button>";
+   		
+   		  			}
+   		  			else{
+   		  				surveyHTML += "<button id=\"btn" + i + "\"><span id=\"choice" + i + "\"></span></button>";
+   		  			}
    		  		}
-   		  		
    		  		document.getElementById("buttons").innerHTML = surveyHTML;
    		  		
    		  		if(detailList.length === questions[questionIndex-1].scale) {
@@ -221,6 +234,17 @@ var questions = [];
 					 	guess("btn" + i, i);
 			  		}
    		  		}
+   		  		
+   		  		if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
+   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+   		  			document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\" align="center"><span>다음 문항</span></button>';
+   		  			multipleGuess(0, questions[questionIndex-1].scale);
+   		  			
+				}
+   		  		else{
+   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+   		  		}
+   		  		
    		    }
    		    else { // 주관식
    		    	var surveyHTML = " ";
@@ -257,7 +281,53 @@ var questions = [];
    		    populate();
    		  }
    		}
-
+   		
+   		function Switch(obj) {
+   			obj.classList.toggle( 'btn0--isSwitched' );
+   			
+        }
+   		
+   		var onClick = 0;
+   		var onClickList = [];
+   		function multipleGuess(id, num) {
+     		 var nextBtn = document.getElementById("multipleBtn");
+     		 var btns = [];
+     		 for(var i = 0 ;i < num; i++){
+     		 	btns.push(document.getElementById("btn" + i));
+     		 	onClickList.push(0);
+     		 }
+     		
+     		 
+     		 for(var i=0; i < num; i++) {
+     			//alert(btns[i].name);
+     			btns[i].addEventListener("click", function(){
+     		       if(onClickList[this.name] === 0) {
+     		    	   this.style.backgroundColor = "#57636e"; // btns[i]. style 하면 안됨
+     		    	   
+     		    	   onClickList[this.name] = 1;
+     		    	}
+     		       else {
+     		    	  this.style.backgroundColor = "#778897";
+    		    	   
+    		    	   onClickList[this.name] = 0;
+     		       }
+     		    });
+     		}
+     		 
+     		nextBtn.onclick = function() {
+     			if(choiceArray.length > questionIndex){
+     			  choiceArray[questionIndex] = -1; // -1 들어감 (복수선택이라는 뜻) 
+     		 	 }
+     		  	else{
+     			  score = score + idx;
+     			  choiceArray.push(idx);
+     		  	}
+     		  	questionIndex++;
+     			 
+     		    populate();
+     		  }
+     		}
+	
    		function backButton() {
    			var backButton = document.getElementById("backBtn");
    			
