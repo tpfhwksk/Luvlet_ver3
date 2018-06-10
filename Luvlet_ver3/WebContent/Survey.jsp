@@ -237,8 +237,8 @@ var questions = [];
    		  		
    		  		if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
-   		  			document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\" align="center"><span>다음 문항</span></button>';
-   		  			multipleGuess(0, questions[questionIndex-1].scale);
+   		  			document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\"><span>다음 문항</span></button>';
+   		  			multipleGuess(questions[questionIndex-1].num, questions[questionIndex-1].scale);
    		  			
 				}
    		  		else{
@@ -282,21 +282,33 @@ var questions = [];
    		  }
    		}
    		
-   		function Switch(obj) {
-   			obj.classList.toggle( 'btn0--isSwitched' );
-   			
-        }
    		
    		var onClick = 0;
    		var onClickList = [];
-   		function multipleGuess(id, num) {
+   		function multipleGuess(surveynum, num) {
      		 var nextBtn = document.getElementById("multipleBtn");
      		 var btns = [];
      		 for(var i = 0 ;i < num; i++){
      		 	btns.push(document.getElementById("btn" + i));
-     		 	onClickList.push(0);
+     		 	//onClickList.push(0);
      		 }
      		
+     		 var isNew = 1;
+     		 for(var i = 0; i < mChoicesList.length; i++){
+     			 if(mChoicesList[i].num === surveynum){
+     				 isNew = 0;
+     				 var choices = mChoicesList[i].choiceList;
+     				 for(var j = 0; j < choices.length; j++){
+     					 btns[choices[j]].style.backgroundColor = "#57636e";
+     				 }
+     			 }
+     		 }
+     		 if(isNew === 1){
+     			onClickList = [];
+     			for(var i = 0 ;i < num; i++){
+         		 	onClickList.push(0);
+         		 }
+     		 }
      		 
      		 for(var i=0; i < num; i++) {
      			//alert(btns[i].name);
@@ -314,18 +326,53 @@ var questions = [];
      		    });
      		}
      		 
+     		 var atleastOneBtn = 0;
      		nextBtn.onclick = function() {
      			if(choiceArray.length > questionIndex){
      			  choiceArray[questionIndex] = -1; // -1 들어감 (복수선택이라는 뜻) 
+     			  
      		 	 }
      		  	else{
-     			  score = score + idx;
-     			  choiceArray.push(idx);
+     			  choiceArray.push(-1);
      		  	}
-     		  	questionIndex++;
+     			  var selectedBtnNum = []; 
+     			  for(var i = 0; i < btns.length; i++){
+     				  if(onClickList[i] === 1){
+     					  selectedBtnNum.push(i);
+     					 atleastOneBtn = 1;
+     				  }
+     			  }
+     			  if(atleastOneBtn === 0){
+     				  alert("한 개 이상 선택하세요.");
+     				  onclickList = [];
+     				  for(var i = 0; i < mChoicesList.length; i++){
+       				  	if(mChoicesList[i].num === surveynum){
+       					  mChoicesList[i].choiceList = [];
+       				  }
+       			  }
+     				  populate();
+     			  }
+     			  else{
+     				  var chk = 0;
+     				  var tmp = new multipleChoice(surveynum, selectedBtnNum); // 몇번째 문제에서 몇번의 버튼들이 선택되었는지
+     				  
+     				  for(var i = 0; i < mChoicesList.length; i++){
+        				  if(mChoicesList[i].num === surveynum){
+        					  mChoicesList[i].choiceList = selectedBtnNum;
+        					  chk = 1;
+        				  }
+        			  }
+     				  if(chk === 0){
+     				  	mChoicesList.push(tmp);
+     				  }
+     				 questionIndex++;
+     				 //alert(mChoicesList[0].choiceList);
+     				populate();
+     			  }
+     		  	}
+     		  	//questionIndex++;
      			 
-     		    populate();
-     		  }
+     		    //populate();
      		}
 	
    		function backButton() {
