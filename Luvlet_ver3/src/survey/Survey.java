@@ -4,18 +4,22 @@ import java.io.*;
 import java.util.*;
 
 public class Survey {
+	private int surveyNum;
 	private String surveyContent; 
 	private int surveyType;
 	private int surveyScale;
 	private int surveyMultiple;
 	private String surveyDetail;
+	private int surveyAvailable;
 	
-	 public Survey(String content, int type, int scale, int multiple, String detail) {
-	      this.surveyContent = content;
+	public Survey(int num, String content, int type, int scale, int multiple, String detail, int available) {
+	     this.surveyNum = num; 
+		 this.surveyContent = content;
 	      this.surveyType = type;
 	      this.surveyScale = scale;
 	      this.surveyMultiple = multiple;
 	      this.surveyDetail = detail;
+	      this.surveyAvailable = available;
 	   }
 
 	   public Survey(String content, int type) {
@@ -24,6 +28,25 @@ public class Survey {
 
 	   }// 설문지 전체 설명이랑 서술형 문항 위한 생성자
 	
+	public Survey() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getSurveyNum() {
+		return surveyNum;
+	}
+
+	public void setSurveyNum(int surveyNum) {
+		this.surveyNum = surveyNum;
+	}
+	
+	 public int getSurveyAvailable() {
+		return surveyAvailable;
+	}
+
+	public void setSurveyAvailable(int surveyAvailable) {
+		this.surveyAvailable = surveyAvailable;
+	}
 	
 	public String getSurveyContent() {
 		return surveyContent;

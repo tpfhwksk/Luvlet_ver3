@@ -65,7 +65,7 @@ public class fileUploading {
 	                  }
 	                  if (question.length > 4) {
 	                     // detail = question[4].split(",");
-	                     survey.add(new Survey(question[0], type, scale, multiple, question[4]));
+	                     survey.add(new Survey(0, question[0], type, scale, multiple, question[4], 1));
 
 	                  } else {
 	                     String d_detail = "";
@@ -75,7 +75,7 @@ public class fileUploading {
 	                        d_detail = d_detail + tmp;
 
 	                     }
-	                     survey.add(new Survey(question[0], type, scale, multiple, d_detail));
+	                     survey.add(new Survey(0, question[0], type, scale, multiple, d_detail, 1));
 	                  }
 
 	                  /*

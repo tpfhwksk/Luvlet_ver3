@@ -152,7 +152,7 @@ public class SurveyDAO {
 	
 	public int ordering(String title){
 		String titleWithNoSpace = title.replaceAll(" ", "_");
-		System.out.println(titleWithNoSpace);
+		//System.out.println(titleWithNoSpace);
 		String SQL = "SELECT * FROM " + titleWithNoSpace + " ORDER BY surveynum asc"; 
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -177,6 +177,32 @@ public class SurveyDAO {
 			while (rs.next()) {
 				String title = rs.getString(2);
 				list.add(title);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list; 
+	}
+	
+	public ArrayList<Survey> getList(String title) { //여기서 타이틀 받으면.. 
+		String titleWithNoSpace = title.replaceAll(" ", "_");
+		String SQL = "SELECT * FROM " + titleWithNoSpace + " ORDER BY surveynum ASC"; 
+		//내림차순
+		ArrayList<Survey> list = new ArrayList<Survey>();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Survey survey = new Survey();
+				survey.setSurveyNum(rs.getInt(1));
+				survey.setSurveyContent(rs.getString(2));
+				survey.setSurveyType(rs.getInt(3));
+				survey.setSurveyScale(rs.getInt(4));
+				survey.setSurveyMultiple(rs.getInt(5));
+				survey.setSurveyDetail(rs.getString(6));
+				survey.setSurveyAvailable(rs.getInt(7));
+				
+				list.add(survey);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

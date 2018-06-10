@@ -3,7 +3,9 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="survey.surveyTitle" %>
 <%@ page import="survey.SurveyDAO" %>
+<%@ page import="survey.Survey" %>
 <%@ page import="java.util.ArrayList" %>
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:useBean id="surveytitle" class="survey.surveyTitle" scope="page"/>
 <jsp:setProperty name="surveytitle" property="title"/>
 <!DOCTYPE html>
@@ -13,16 +15,27 @@
 <meta name="viewport" content="width=device-width" , initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/custom.css">
+<script src="question.js"></script>
 <title>Luvlet</title>
 </head>
 <body>
+<script>
+var questions = [];
+</script>
 	<%
 		String userID = null;
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
+		if (userID == null) {
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('로그인이 필요합니다.')");
+			script.println("location.href = 'login.jsp'");
+			script.println("</script>");
+		}
 	%>
-	<style>
+<style>
 .right_align {
 	margin-right: 10px;
 }
@@ -72,37 +85,211 @@
 			%>
 		</div>
 	</nav>
+				<%
+					SurveyDAO surveydao = new SurveyDAO();
+					//bbsDAO.countNum();
+					ArrayList<Survey> list = surveydao.getList(surveytitle.getTitle());
+				%>
 	
-	
-	
-	
-	
+	<% for(int i=1; i <list.size(); i++){
+        	%><script>
+        	<%-- alert(<%=i%>);
+        	alert("<%=list.get(i).getSurveyContent()%>"); --%>
+        	var question = new Question(<%=list.get(i).getSurveyNum()%>, "<%=list.get(i).getSurveyContent()%>", <%=list.get(i).getSurveyType()%>, <%=list.get(i).getSurveyScale()%>, <%=list.get(i).getSurveyMultiple()%>, "<%=list.get(i).getSurveyDetail()%>" );
+       		questions.push(question);
+        	</script>
+        	<%
+        }
+        	%>
+        	
+  
 	<div class="container">
-		<p><%out.println(surveytitle.getTitle());%></p>
-		<div class="buttons" align="center">
-
-        </div>
+		 <div id="survey">
+		  <h1 align="center"><% out.println(surveytitle.getTitle()); %></h1>
+		  <hr style="margin-bottom:20px">
+        <h2><%=list.get(0).getSurveyContent()%></h2>
+        <hr style="margin-bottom:20px">
+       
+        
+        <p id="question"></p>
+        <div align="center"><button id="startBtn"><span>START</span></button></div>
+        <div id="buttons" align="center"></div>
+        <!-- 
+          <button id="backBtn"><span>이전 문항</span></button>
+        	
+        <hr style="margin-top: 50px">
+        <footer>
+          <p id="progress">Question x of y.</p>
+          
+        </footer> -->
+      </div>
 	</div>
+	<%!
+	public void printTest(int head, javax.servlet.jsp.JspWriter out) 
+			throws ServletException 
+			{ 
+			try 
+			{ 
+				out.println(head); 
+				
+			} 
+			catch (Exception e){} 
+			} 
+
+	%>
+
 	
-	
-	
-	
-	
-	<% String my="http://test.com"; %>
+	<% String my="http://test.com"; 
+		int questionIndexJAVA = 0;
+		
+		int a = 1;
+		a = a + 1;
+		
+	%>
 	<script>
 	var myhome = "<%=my%>";
 	//alert(myhome);
 	</script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
-	 <script>
-   		 var addBtn = document.getElementById("addSurveyBtn");
+	<script>
+		var questionIndex = 1;
+		var choiceArray = [];
+		var score = 0;
+   		 var startBtn = document.getElementById("startBtn");
 
-   		 addBtn.onclick = function() {
-  			 location.href = "addNewSurvey.jsp";
-  		 }
-  		 
-   		 
-    </script>
+   		 startBtn.onclick = function() {
+   		  	var surveyHTML = "<h1 align=\"center\">" + "<%=surveytitle.getTitle()%>" + "</h1>";
+   		  	
+		  	surveyHTML += "<hr style=\"margin-bottom:20px\">";
+		  	surveyHTML += "<h2 id=\"question\"></h2>";
+		        
+		 	surveyHTML += "<div id=\"buttons\" align=\"center\">";
+		  	surveyHTML += "	<button id=\"btn0\"><span id=\"choice0\"></span></button>";
+		 	surveyHTML += "	<button id=\"btn1\"><span id=\"choice1\"></span></button>";
+			  surveyHTML += "	<button id=\"btn2\"><span id=\"choice2\"></span></button>";
+			  surveyHTML += "	<button id=\"btn3\"><span id=\"choice3\"></span></button>";
+			  surveyHTML += "	<button id=\"btn4\"><span id=\"choice4\"></span></button>";
+			  surveyHTML += "</div>";
+			          
+			  surveyHTML += "<button id=\"backBtn\"><span>이전 문항</span></button>";
+			        	
+			  surveyHTML += "<hr style=\"margin-top: 50px\">";
+			  surveyHTML += "<footer>";
+			  surveyHTML += "	<p id=\"progress\">Question x of y.</p>";
+			  surveyHTML += "</footer>";
+	
+			  document.getElementById("survey").innerHTML = surveyHTML;
+			  
+			  populate();
+   		 }
+   		function populate() {
+   		  /*
+   			document.getElementById("totalNumber").innerHTML = quiz.questions.length;
+   			*/
+   			//alert(quiz.questionIndex);
+   			var x=1;
+   			var summ = questionIndex-x;
+   		  if(questions.length === summ){
+   		    showScores();
+   		    
+   		  }
+   		  else {
+   		    //show question
+   		    document.getElementById("question").innerHTML=questions[questionIndex-1].content;
+
+   		    //show choices
+   		    //var choices = quiz.getQuestionIndex().choices;
+   		    if(questions[questionIndex-1].type === 0){ //객관식
+   		  		var detailList = questions[questionIndex-1].detail.split(',');
+   		  		var surveyHTML = " ";
+   		  		
+   		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
+   		  			surveyHTML += "<button id=\"btn" + i + "\"><span id=\"choice" + i + "\"></span></button>";
+   		  		}
+   		  		
+   		  		document.getElementById("buttons").innerHTML = surveyHTML;
+   		  		
+   		  		if(detailList.length === questions[questionIndex-1].scale) {
+   		  			for(var i = 0; i < questions[questionIndex-1].scale; i++){
+   		  				document.getElementById("choice" + i).innerHTML = detailList[i];
+   		  			}
+   		  		}
+   		  		else{
+	   		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
+					 	document.getElementById("choice" + i).innerHTML = i;
+					 	guess("btn" + i, i);
+			  		}
+   		  		}
+   		    }
+   		    else { // 주관식
+   		    	var surveyHTML = " ";
+   		    	surveyHTML += '<form method="post" action="surveyResult.jsp">';
+   		    	surveyHTML += '<h3 style="text-align: center;">주관식</h3>';
+   		    	surveyHTML += '<div class="form-group">';
+   		    	surveyHTML += '<input type="text" class="form-control" placeholder="내용을 입력해주세요." NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+				surveyHTML += '</div>';
+				surveyHTML += '<button id="btn0"><span id="choice0">다음 문항</span></button>';
+				surveyHTML += '</form>'
+				document.getElementById("buttons").innerHTML = surveyHTML;
+				guess("btn0", 0);
+   		    }
+   			//surveyHTML += '<button name="title" id="title" value="subjective' +  questions[questionIndex-1].num + '><span>작성완료</span></button>';
+   		    backButton();
+   		    showProgress();
+   		  }
+   		  
+   		}
+
+   		function guess(id, idx) {
+   		  var button = document.getElementById(id);
+   		  
+   		  button.onclick = function() {
+   			if(choiceArray.length > questionIndex){
+   			  choiceArray[questionIndex] = idx;
+   		 	 }
+   		  	else{
+   			  score = score + idx;
+   			  choiceArray.push(idx);
+   		  	}
+   		  	questionIndex++;
+   			 
+   		    populate();
+   		  }
+   		}
+
+   		function backButton() {
+   			var backButton = document.getElementById("backBtn");
+   			
+   			backButton.onclick = function() {
+   				if(questionIndex === 1) {
+   					alert("This is first item of this survey.");
+   				}
+   				else {
+   					questionIndex--;
+   					populate();
+   				}
+   		    }
+   		}
+
+   		function showProgress() {
+   		  var currentQuestionNumber = questionIndex;
+   		  document.getElementById("progress").innerHTML = "Question " + currentQuestionNumber + " of " + questions.length;
+   		}
+
+
+
+   		function showScores() {
+   		  var gameOverHtml = "<h1>Result</h1>";
+   		  var sum = 0;
+   		  //alert(quiz.choiceArray);
+   		  for(var i = 0; i < choiceArray.length; i++){
+   			  sum += choiceArray[i];
+   		  }
+   		  gameOverHtml += "<h2 id='score'>End. Thank you</h2>";
+   		  document.getElementById("survey").innerHTML = gameOverHtml;
+   		}
+
+   </script>
 </body>
 </html>
