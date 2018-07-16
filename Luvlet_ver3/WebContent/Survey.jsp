@@ -289,7 +289,8 @@ var questions = [];
 
    		function guess(id, idx) {
    		  var button = document.getElementById(id);
-   		  
+   		  var nStart = new Date().getTime(); 
+   	   
    		  button.onclick = function() {
    			if(choiceArray.length > questionIndex){
    			  choiceArray[questionIndex] = idx;
@@ -300,6 +301,9 @@ var questions = [];
    		  	}
    		  	questionIndex++;
    			 
+   		 	var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+   		 var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+   		alert(nDiff + "ms");
    		    populate();
    		  }
    		}
@@ -309,6 +313,9 @@ var questions = [];
    		var onClickList = [];
    		function multipleGuess(surveynum, num) {
      		 var nextBtn = document.getElementById("multipleBtn");
+     		 
+     		 var nStart = new Date().getTime();
+     		
      		 var btns = [];
      		 for(var i = 0 ;i < num; i++){
      		 	btns.push(document.getElementById("btn" + i));
@@ -367,6 +374,9 @@ var questions = [];
        					  mChoicesList[i].choiceList = [];
        				  }
        			  }
+     				 var nEnd =  new Date().getTime();
+     				 var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+     		   			alert(nDiff + "ms");
      				  populate();
      			  }
      			  else{
@@ -403,6 +413,9 @@ var questions = [];
      				  }
      				 questionIndex++;
      				 //alert(mChoicesList[0].choiceList);
+     				 var nEnd =  new Date().getTime();
+     				 var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+     		   		alert(nDiff + "ms");
      				populate();
      			  }
      		  	}
