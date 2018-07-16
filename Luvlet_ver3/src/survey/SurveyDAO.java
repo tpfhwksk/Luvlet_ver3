@@ -185,6 +185,7 @@ public class SurveyDAO {
 	}
 	
 	public ArrayList<Survey> getList(String title) { //여기서 타이틀 받으면.. 
+		
 		String titleWithNoSpace = title.replaceAll(" ", "_");
 		String SQL = "SELECT * FROM " + titleWithNoSpace + " ORDER BY surveynum ASC"; 
 		//내림차순

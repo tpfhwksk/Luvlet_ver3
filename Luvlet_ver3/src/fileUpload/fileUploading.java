@@ -65,6 +65,12 @@ public class fileUploading {
 	                  }
 	                  if (question.length > 4) {
 	                     // detail = question[4].split(",");
+	                	  detail = question[4].split(",");
+	                      if(detail.length != scale){
+	                         question[0] +=" 0("+detail[0]+"),";
+	                         question[0] +=Integer.toString(scale/2)+ "("+detail[detail.length/2]+"),";
+	                         question[0] +=Integer.toString(scale-1)+ "("+detail[detail.length-1]+")";
+	                      }
 	                     survey.add(new Survey(0, question[0], type, scale, multiple, question[4], 1));
 
 	                  } else {

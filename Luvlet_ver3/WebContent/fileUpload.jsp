@@ -23,7 +23,7 @@
 		parsing.fileInput("C:\\16OODP\\eclipse\\workspace_copy\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Luvlet\\upload\\" + file);
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("location.href = 'Survey.jsp'");
+		script.println("location.href = 'selectSurvey.jsp'");
 		script.println("</script>");
 	} catch (Exception e){
 		e.printStackTrace();

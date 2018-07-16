@@ -215,14 +215,26 @@ var questions = [];
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(1 === questions[questionIndex-1].multiple){
    		  				
-   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" ><span id=\"choice" + i + "\"></span></button>";
+   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
    		
    		  			}
    		  			else{
-   		  				surveyHTML += "<button id=\"btn" + i + "\"><span id=\"choice" + i + "\"></span></button>";
+   		  				surveyHTML += "<button id=\"btn" + i + "\" width =(100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
    		  			}
    		  		}
    		  		document.getElementById("buttons").innerHTML = surveyHTML;
+   		  		document.getElementById("buttons").innerHTML += "<p float=left;>전혀 아니다</p>";
+   		  		
+   		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
+   		  			if(questions[questionIndex-1].multiple === 0){
+   		  				var tmpBtn = document.getElementById('btn' + i);
+   		  				tmpBtn.style.width = 100 / (questions[questionIndex-1].scale + 1)  + '%';
+   		  			}
+   		  			else{
+   		  			var tmpBtn = document.getElementById('btn' + i);
+		  				tmpBtn.style.width = 120  + 'px';
+   		  			}
+   		  		}
    		  		
    		  		if(detailList.length === questions[questionIndex-1].scale) {
    		  			for(var i = 0; i < questions[questionIndex-1].scale; i++){
@@ -238,9 +250,10 @@ var questions = [];
    		  		
    		  		if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
-   		  			document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\"><span>다음 문항</span></button>';
+   		  			document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\" ><span>다음 문항</span></button>';
    		  			multipleGuess(questions[questionIndex-1].num, questions[questionIndex-1].scale);
-   		  			
+   		  			//var nextBtn = document.getElementById("multipleBtn");
+   		  			//multipleBtn.style.
 				}
    		  		else{
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
@@ -337,13 +350,8 @@ var questions = [];
      		 
      		 var atleastOneBtn = 0;
      		nextBtn.onclick = function() {
-     			if(choiceArray.length > questionIndex){
-     			  choiceArray[questionIndex] = -1; // -1 들어감 (복수선택이라는 뜻) 
-     			  
-     		 	 }
-     		  	else{
-     			  choiceArray.push(-1);
-     		  	}
+     			
+     			
      			  var selectedBtnNum = []; 
      			  for(var i = 0; i < btns.length; i++){
      				  if(onClickList[i] === 1){
@@ -365,6 +373,25 @@ var questions = [];
      				  var chk = 0;
      				  var tmp = new multipleChoice(surveynum, selectedBtnNum); // 몇번째 문제에서 몇번의 버튼들이 선택되었는지
      				  
+     				  //alert(selectedBtnNum);
+     				  var x = "_";
+     				 for(var i = 0; i < selectedBtnNum.length; i++){
+     					if(choiceArray.length > questionIndex){ // 다시 돌아와서 선택한 경우
+       	     			  //choiceArray[questionIndex] += "_" + selectedBtnNum[i]; // -1 들어감 (복수선택이라는 뜻) 
+       	     			  x += selectedBtnNum[i] + "_";
+       	     		 	 }
+       	     		  	else{
+       	     		  	 x += selectedBtnNum[i] + "_";  
+       	     		  	}	
+     				 }
+     				 
+     				if(choiceArray.length > questionIndex){
+     				 	choiceArray[questionIndex] = x;
+     				}
+     				else{
+     					choiceArray.push(x);
+     				}
+     					 
      				  for(var i = 0; i < mChoicesList.length; i++){
         				  if(mChoicesList[i].num === surveynum){
         					  mChoicesList[i].choiceList = selectedBtnNum;
@@ -411,19 +438,22 @@ var questions = [];
    		function showScores() {
    		  var gameOverHtml = "<h1>설문조사가 모두 끝났습니다.</h1>";
    		  var sum = 0;
-   		  //alert(quiz.choiceArray);
+   		  alert(choiceArray);
    		  for(var i = 0; i < choiceArray.length; i++){
    			  sum += choiceArray[i];
    		  }
-   		  gameOverHtml += "<h2 id='score'>Thank you</h2>";
-   			gameOverHtml += "<button id='btn0' onclick='mainLink()'>돌아가기</h2>";
+   		  alert(sum);
+   			gameOverHtml += "<h2 id='score'>Thank you</h2>";
+        	gameOverHtml +='<form name ="send" action="resultAction.jsp" method = "post">';
+        	gameOverHtml +='<input type ="hidden" name="choiceArray" value="">';
+        	gameOverHtml +='<input type ="submit" value="send">';    
+   			gameOverHtml += "<button id='btn0' onclick='mainLink()'>돌아가기";
+   			gameOverHtml +="</form>";
+   			
    		  document.getElementById("survey").innerHTML = gameOverHtml;
+   		document.send.choiceArray.value=choiceArray;
    		  
    		  
-   		
-   		  var path = "C:\\16OODP\\eclipse\\workspace_copy\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Luvlet\\surveyResult\\";
-   		  makeFile(path);
-   		  var saveResult = saveFile(path, choiceArray, true);
    		}
    		
    		function saveFile(path, content, bool){

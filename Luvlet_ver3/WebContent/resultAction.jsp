@@ -7,13 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<script language="javascript">
-  	function test(){
-    	for (var i=0; i<surveyresult.survey.length; i++ ){
-      		alert(surveyresult.survey[i].value);
-    	}
- 	 }
-  	test();
+	<%
+	   String a = request.getParameter("choiceArray");
+	      
+
+	%>
+	<script>
+	   var tmp ="<%=a%>";
+	   document.write(tmp);
 	</script>
 	
 
