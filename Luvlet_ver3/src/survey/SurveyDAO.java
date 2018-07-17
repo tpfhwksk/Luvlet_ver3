@@ -71,14 +71,14 @@ public class SurveyDAO {
 		}
 		
 		try{
+		String titleWithNoSpace = title.replaceAll(" ", "_"); // 테이블 명으로 공백은 넣을 수 없다. 가상현실_관련_경험_설문지
 		String tableSql = "SELECT table_name FROM information_schema.tables where table_schema = ? and table_name = ?";
 		pstmt2 = conn.prepareStatement(tableSql);
 		pstmt2.setString(1, "LUVLET");
-		pstmt2.setString(2, title);
+		pstmt2.setString(2, titleWithNoSpace);
 
 		rs = pstmt2.executeQuery();
-		String titleWithNoSpace = title.replaceAll(" ", "_"); // 테이블 명으로 공백은 넣을 수 없다. 가상현실_관련_경험_설문지
-		System.out.println(titleWithNoSpace);
+		//System.out.println(titleWithNoSpace);
 		// 테이블이 없다면
 		if (!rs.next()) {
 			// 테이블 생성
@@ -117,10 +117,83 @@ public class SurveyDAO {
 		} catch (Exception e) {
 		}
 	}
+		
+		try{ // 결과 테이블 만들기
+			String titleWithNoSpace = title.replaceAll(" ", "_"); // 테이블 명으로 공백은 넣을 수 없다. 가상현실_관련_경험_설문지_결과
+			titleWithNoSpace += "_결과";
+			String tableSql = "SELECT table_name FROM information_schema.tables where table_schema = ? and table_name = ?";
+			pstmt2 = conn.prepareStatement(tableSql);
+			pstmt2.setString(1, "LUVLET");
+			pstmt2.setString(2, titleWithNoSpace);
+
+			rs = pstmt2.executeQuery();
+			//System.out.println(titleWithNoSpace);
+			// 테이블이 없다면
+			if (!rs.next()) {
+				// 테이블 생성
+				Statement stmt = conn.createStatement();
+				String sql = "create table " + titleWithNoSpace
+						+ "("
+						+ "num INT,"
+						+ "userID VARCHAR(30),"
+						+ "choiceArray VARCHAR(500),"
+						+ "timeArray VARCHAR(1000),"
+						+ "PRIMARY KEY (userID)"
+						+ ")";
+
+				boolean re = stmt.execute(sql);
+				stmt.close();
+				//System.out.println(rs2);
+			}
+			else{
+				System.out.println("This survey result table is already existed!");
+				return -1;
+			}
+		}catch(Exception e) {
+			System.out.println("db connect err : " + e);
+		}
 
 	return 1; // 데이터베이스 오류
 	}
 
+	public int getNextInResult(String title) {
+		String titleWithNoSpace = title.replaceAll(" ", "_");
+		titleWithNoSpace += "_결과";
+		String SQL = "SELECT num FROM " + titleWithNoSpace +" ORDER BY num DESC"; 
+		//내림차순, 가장 마지막에 쓰인 번호를 가져옴
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			//pstmt.setString(1, titleWithNoSpace);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1) + 1;
+			}
+			return 1; // 첫 번째 게시물인 경우
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류
+	}
+
+	public int resultWrite(String title, String userID, String choiceArray, String timeArray){
+		String titleWithNoSpace = title.replaceAll(" ", "_");
+		titleWithNoSpace += "_결과";
+		String SQL = "INSERT INTO " + titleWithNoSpace + " VALUES (?, ?, ?, ?)";
+		int nextNum = getNextInResult(title);
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, nextNum);
+			pstmt.setString(2, userID);
+			pstmt.setString(3, choiceArray);
+			pstmt.setString(4, timeArray);
+			//rs = pstmt.executeQuery(); // insert문은 이게 필요없다.
+			return pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("db connect err : " + e);
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류
+	}
 	
 	public int write(String title, int num, String content, int type){
 		String titleWithNoSpace = title.replaceAll(" ", "_");

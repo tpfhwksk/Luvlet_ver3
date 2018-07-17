@@ -163,6 +163,7 @@ var finalIndex = 0;
 	<script>
 		var questionIndex = 1;
 		var choiceArray = [];
+		var responseTimeArray = []; //반응시간
 		var score = 0;
    		 var startBtn = document.getElementById("startBtn");
    		 var mChoicesList = [];
@@ -225,7 +226,7 @@ var finalIndex = 0;
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(1 === questions[questionIndex-1].multiple){
    		  				
-   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
+   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span class=\"spanClass\" id=\"choice" + i + "\"></span></button>";
    		
    		  			}
    		  			else{
@@ -233,7 +234,7 @@ var finalIndex = 0;
    		  			}
    		  		}
    		  		document.getElementById("buttons").innerHTML = surveyHTML;
-   		  		document.getElementById("buttons").innerHTML += "<p float=left;>전혀 아니다</p>";
+   		  		//document.getElementById("buttons").innerHTML += "<p float=left;>전혀 아니다</p>";
    		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(questions[questionIndex-1].multiple === 0){ //한개만 선택가능 (버튼 일자로 나열)
@@ -265,7 +266,7 @@ var finalIndex = 0;
    		  		*/
    		  		
    		  		if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
-   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
    		  		
    		  			if(questionIndex === finalIndex){ //마지막 문항일 때
    		  				var gameOverHtml = "<button id=\"backBtn\"><span>이전 문항</span></button>";
@@ -273,7 +274,7 @@ var finalIndex = 0;
 	        			document.getElementById("backAndmultiBtn").innerHTML = gameOverHtml;
    		  			}
    		  			else{
-   		  				document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\" ><span>다음 문항</span></button>';
+   		  				document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"multipleBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
    		  			}
    		  			multipleGuess(questions[questionIndex-1].num, questions[questionIndex-1].scale);
    		  			//var nextBtn = document.getElementById("multipleBtn");
@@ -281,7 +282,7 @@ var finalIndex = 0;
 					
    		  		}
    		  		else{
-   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
+   		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
    		  			//alert("이전");
    		  			if(questionIndex === finalIndex){ //마지막 문항일 때
    		  				/* document.getElementById("backAndmultiBtn").innerHTML += '<form name="send" action="resultAction.jsp" method="post">';
@@ -294,8 +295,8 @@ var finalIndex = 0;
 		        		gameOverHtml +='<button type="button" class="resultSubmitBtn" name="sbm" id="sbm" value="choiceArr"><span>제출하기</span></button>';
 		        		gameOverHtml +='</form>'; */
 		        		//gameOverHtml +='<input class="resultSubmitBtn" type ="submit" value="send">';  
-		        		var gameOverHtml = "<button id=\"backBtn\"><span>이전 문항</span></button>";
-		        		gameOverHtml += "<button class=\"resultSubmitBtn\" id=\"toResult\"><span>끝내기</span></button>"; 
+		        		var gameOverHtml = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
+		        		gameOverHtml += "<button class=\"resultSubmitBtn\" id=\"toResult\"><span class=\"spanClass\">끝내기</span></button>"; 
 		        		document.getElementById("backAndmultiBtn").innerHTML = gameOverHtml;
 		        		document.getElementById("toResult").addEventListener("click", js);
 		        		  function js() {
@@ -374,17 +375,21 @@ var finalIndex = 0;
    		  		var nStart = new Date().getTime(); 
    	   
    		 		 button.onclick = function() {
+   		 			var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+   		 			var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+   		 			
    					if(choiceArray.length > questionIndex){
    					  choiceArray[questionIndex - 1] = idx;
+   					  responseTimeArray[questionIndex - 1] = nDiff + "ms";
    		 	 		}
    		  			else{
    					  score = score + idx;
    					  choiceArray.push(idx);
+   					  responseTimeArray.push(nDiff + "ms");
    		  			}
    		  			questionIndex++;
    			 
-   		 			var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
-   		 			var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+   		 			//alert("popul");
    					//alert(nDiff + "ms");
    		   			 populate();
    		 		 }
@@ -463,9 +468,6 @@ var finalIndex = 0;
        					  mChoicesList[i].choiceList = [];
        				  	}
        			 	 }
-     				 var nEnd =  new Date().getTime();
-     				 var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
-     		   			//alert(nDiff + "ms");
      				 
      				  populate();
      			  }
@@ -484,12 +486,15 @@ var finalIndex = 0;
        	     		  	 x += selectedBtnNum[i] + "_";  
        	     		  	}	
      				 }
-     				 
+     				var nEnd =  new Date().getTime();
+    				var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
      				if(choiceArray.length > questionIndex){
      				 	choiceArray[questionIndex - 1] = x;
+     				 	responseTimeArray[questionIndex - 1] = nDiff + "ms";
      				}
      				else{
      					choiceArray.push(x);
+     					responseTimeArray.push(nDiff + "ms");
      				}
      					 
      				  for(var i = 0; i < mChoicesList.length; i++){
@@ -503,8 +508,6 @@ var finalIndex = 0;
      				  }
      				 questionIndex++;
      				 //alert(mChoicesList[0].choiceList);
-     				 var nEnd =  new Date().getTime();
-     				 var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
      		   		//alert(nDiff + "ms");
      				populate();
      			  }
@@ -539,23 +542,28 @@ var finalIndex = 0;
 		}
    		
    		function showScores() {
+   		  var title = "<%=surveytitle.getTitle()%>"; // 무조건 따옴표안에 필수
    		  var gameOverHtml = "<h1>설문조사가 모두 끝났습니다.</h1>";
+   		  gameOverHtml += "<h2>정말로 제출하시겠습니까?</h2>";
+   		  gameOverHtml += "<br>";
    		  var sum = 0;
    		  alert(choiceArray);
    		  for(var i = 0; i < choiceArray.length; i++){
    			  sum += choiceArray[i];
    		  }
    		  //alert(sum);
-   			gameOverHtml += "<h2 id='score'>Thank you</h2>";
         	gameOverHtml +='<form name ="send" action="resultAction.jsp" method = "post">';
         	gameOverHtml +='<input type ="hidden" name="choiceArray" value="">';
-        	gameOverHtml +='<input type ="submit" value="send">';    
-   			gameOverHtml += "<button id='btn0' onclick='mainLink()'>돌아가기";
+        	gameOverHtml +='<input type ="hidden" name="timeArray" value="">';
+        	gameOverHtml +='<input type ="hidden" name="surveyTitle" value="">';
+        	gameOverHtml +='<button class="reallySubmitBtn" name="sbm" id="sbm" value="choiceArr"><span class="spanClass">제출하기</span></button>';
    			gameOverHtml +="</form>";
    			
-   		  document.getElementById("survey").innerHTML = gameOverHtml;
-   		document.send.choiceArray.value=choiceArray;
-   		  
+   		  	document.getElementById("survey").innerHTML = gameOverHtml;
+   			document.send.choiceArray.value=choiceArray;
+   			document.send.timeArray.value=responseTimeArray;
+   			document.send.surveyTitle.value = title;
+   			
    		  
    		}
    		

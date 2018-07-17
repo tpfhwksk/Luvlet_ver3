@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
+<% request.setCharacterEncoding("UTF-8"); %>
 <%@ page import="survey.SurveyDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
@@ -13,74 +14,63 @@
 <title>Luvlet</title>
 </head>
 <body>
-	<%
-		String userID = null;
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
-		}
-	%>
 	<style>
 .right_align {
 	margin-right: 10px;
 }
 </style>
-		
-	<nav class="navbar navbar-default">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="selectSurvey.jsp">Luvlet</a>
-		</div>
-		<div class="collapse navbar-collapse"
-			id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="main.jsp">main</a></li>
-				<li><a href="bbs.jsp">BBS</a></li>
-			</ul>
-			<%
-				if (userID == null) {
-			%>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">Connect<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="login.jsp">SignIn</a></li>
-						<li><a href="join.jsp">Join</a></li>
-					</ul></li>
-			</ul>
-			<%
-				} else {
-			%>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">회원관리<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="logoutAction.jsp">LogOut</a></li>
-					</ul></li>
-			</ul>
-			<%
-				}
-			%>
-		</div>
-	</nav>
 	<div class="container">
 	<%
-  		 String a = request.getParameter("choiceArray");
-      
-
-
+  		 String choiceArray = request.getParameter("choiceArray");
+      	 String timeArray = request.getParameter("timeArray");
+         String surveyTitle = request.getParameter("surveyTitle");
 	%>
+	
 	<script>
-   	var tmp ="<%=a%>";
-  	 document.write(tmp);
+   	var tmp ="<%=choiceArray%>";
+   	var tmp2 = "<%=timeArray%>";
+   	var tmp3 = "<%=surveyTitle%>";
+   	tmp3 += "_결과";
+  	 document.write("choice Array: " + tmp + "<br>");
+ 	 document.write("Response Time Array: " + tmp2);
+ 	 document.write("Title: " + tmp3);
+
 		
 	</script>
+	
+	</div>
+	<% 
+		String userID = null;
+		if(session.getAttribute("userID") != null) {
+			userID = (String)session.getAttribute("userID");
+		}
+		if(userID == null) {
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('로그인이 필요합니다.')");
+			script.println("location.href = 'login.jsp'");
+			script.println("</script>");
+		} else {
+				SurveyDAO surveyDAO = new SurveyDAO();
+				int result = surveyDAO.resultWrite(surveyTitle, userID, choiceArray, timeArray);
+				if (result == -1) {
+					PrintWriter script = response.getWriter();
+					script.println("<script>");
+					script.println("alert('결과 쓰기에 실패했습니다.')");						
+					script.println("history.back()");
+					script.println("</script>");
+				}
+				else {
+					PrintWriter script = response.getWriter();						
+					script.println("<script>");
+					script.println("location.href = 'selectSurvey.jsp'");
+					script.println("</script>");
+				}
+		}
+	%>
+	
+	
+	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 	 <script>

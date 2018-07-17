@@ -21,7 +21,12 @@ h3 {
 .btnClass {
 	font-family: 'Hanna';
 	font-size: 17px;
-	font-color: #000000;
+}
+
+.spanClass {
+	font-family: 'Hanna';
+	font-size: 17px;
+	text-align: center;
 }
 
 .submitBtn {
@@ -166,6 +171,18 @@ h3 {
   padding: 10px 10px;
 }
 
+.reallySubmitBtn{
+  background-color: #EAEAEA;
+  float: left;
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #1d3c6a;
+  /*margin: 10px 0px 20px 0px;*/
+  padding: 10px 10px;
+}
+
 #title{
 	 background-color: #778897;
   width: 200px;
@@ -202,6 +219,10 @@ h3 {
 }
 
 .submitBtn:hover {
+	cursor: pointer;
+  background-color: #d5d5d5;
+}
+.reallySubmitBtn:hover {
 	cursor: pointer;
   background-color: #d5d5d5;
 }
