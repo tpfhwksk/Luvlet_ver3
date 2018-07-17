@@ -30,6 +30,7 @@ h3 {
   height: 40px; 
   font-family: 'Hanna';
   font-size: 17px;
+  text-align: center;
   border: 1px solid #1d3c6a;
       	/* ÁÂ    ¿ì          À§         ¾Æ·¡*/
   margin: 5px 5px 15px 0px;
@@ -148,6 +149,18 @@ h3 {
   width: 100px;
   height: 50px;
   font-size: 14px;
+  border: 1px solid #1d3c6a;
+  /*margin: 10px 0px 20px 0px;*/
+  padding: 10px 10px;
+}
+
+.resultSubmitBtn{
+  background-color: #EAEAEA;
+  float: right;
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
   border: 1px solid #1d3c6a;
   /*margin: 10px 0px 20px 0px;*/
   padding: 10px 10px;
