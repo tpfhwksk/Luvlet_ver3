@@ -72,20 +72,23 @@
 	<div class="container">
 	
 		<div class="buttons" align="center">
-		<form method="post" action="Survey.jsp">
+		<form style="display:inline; margin:0px;" method="post" action="Survey.jsp">
+		<!-- display:inline; margin:0px;가 form 태그와 addSurvye버튼 사이의 여백(줄바꿈)을 없애줌 -->
+		<!-- 글자가 한 줄 넘어가면 정렬이 달라짐(그 버튼 살짞 밑으로 내려감) -->
 		<!-- value에 다른 페이지로 보낼 값 설정 가능 -->
 				<%
 				SurveyDAO surveydao = new SurveyDAO();
 				ArrayList<String> list = surveydao.getTitleList();
 				for(int i = 0; i < list.size(); i++) {
 				%>
-          			<button name="title" id="title" value="<%=list.get(i)%>"><span><%=list.get(i)%></span></button>
+          			<button name="title" id="title" value="<%=list.get(i)%>"><span class="btnClass"><%=list.get(i)%></span></button>
 				<%	
 					}
 				%>
          	 
-         </form>
-          <button id="addSurveyBtn"><span id="choice4">+</span></button>
+         </form> 
+         <button id="addSurveyBtn"><span id="choice4">+</span></button>
+          
         </div>
 			
 				<%-- <%

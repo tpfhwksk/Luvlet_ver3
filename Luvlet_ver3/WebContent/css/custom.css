@@ -18,9 +18,37 @@ h3 {
 	font-size: 17px;
 }
 
+.btnClass {
+	font-family: 'Hanna';
+	font-size: 17px;
+	font-color: #000000;
+}
+
+.submitBtn {
+	background-color: #fff;
+  width: 120px;
+  height: 40px; 
+  font-family: 'Hanna';
+  font-size: 17px;
+  border: 1px solid #1d3c6a;
+      	/* ÁÂ    ¿ì          À§         ¾Æ·¡*/
+  margin: 5px 5px 15px 0px;
+  padding: 10px 10px;
+}
+
 #btn0, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #btn7, #btn8, #btn9, #btn10, #btn11, #startBtn{
   background-color: #778897;
   width: 100%;
+  color: #ffffff;
+  border: 1px solid #1d3c6a;
+      	/* ÁÂ    ¿ì          À§         ¾Æ·¡*/
+  margin: 5px 5px 15px 0px;
+  padding: 10px 10px;
+}
+
+#btn000 {
+  background-color: #778897;
+  width: 80px;
   font-size: 15px;
   color: #fff;
   border: 1px solid #1d3c6a;
@@ -125,7 +153,20 @@ h3 {
   padding: 10px 10px;
 }
 
-#title, #addSurveyBtn{
+#title{
+	 background-color: #778897;
+  width: 200px;
+  height: 150px;
+  font-size: 15px;
+  color: #fff;
+  border: 1px solid #1d3c6a;
+  /* border-radius: 5px; */
+        /* ÁÂ           ¿ì          À§         ¾Æ·¡ */
+  margin: 10px 70px 50px 0px;
+  padding: 10px 10px;
+}
+
+#addSurveyBtn{
 	 background-color: #778897;
   width: 200px;
   height: 150px;
@@ -147,6 +188,16 @@ h3 {
   outline: 0;
 }
 
+.submitBtn:hover {
+	cursor: pointer;
+  background-color: #d5d5d5;
+}
+
+.fileBtn {
+	background-color: #fff;
+	font-family: 'Hanna';
+	font-size: 17px;
+}
 
 
 

@@ -8,27 +8,9 @@
 <%@ page import="java.util.Enumeration" %>
 <%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy" %>
 <%@ page import="com.oreilly.servlet.MultipartRequest" %>
-<% 
-	String path = request.getRealPath("upload");
-	String file = "";
-	String oriFile = "";
-	int size = 1024 * 1024 * 10;
-	try{
-		MultipartRequest multi = new MultipartRequest(request, path, size, "EUC-KR",new DefaultFileRenamePolicy() );
-		Enumeration files = multi.getFileNames();
-		String str = (String)files.nextElement();
-		file = multi.getFilesystemName(str);
-		oriFile = multi.getOriginalFileName(str);
-		fileUploading parsing = new fileUploading();
-		parsing.fileInput("C:\\16OODP\\eclipse\\workspace_copy\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Luvlet\\upload\\" + file);
-		PrintWriter script = response.getWriter();
-		script.println("<script>");
-		script.println("location.href = 'selectSurvey.jsp'");
-		script.println("</script>");
-	} catch (Exception e){
-		e.printStackTrace();
-	}
-	%>
+
+
+
 
 <!DOCTYPE html>
 <html>
@@ -52,6 +34,37 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		}
+	%>
+	<% 
+	String path = request.getRealPath("upload");
+	String file = "";
+	String oriFile = "";
+	int size = 1024 * 1024 * 10;
+	try{
+		MultipartRequest multi = new MultipartRequest(request, path, size, "EUC-KR",new DefaultFileRenamePolicy() );
+		Enumeration files = multi.getFileNames();
+		String str = (String)files.nextElement();
+		file = multi.getFilesystemName(str);
+		oriFile = multi.getOriginalFileName(str);
+		fileUploading parsing = new fileUploading();
+		int x = parsing.fileInput("C:\\16OODP\\eclipse\\workspace_copy\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Luvlet\\upload\\" + file);
+		
+		if(x == -1){
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('This survey is aleady existed!')");
+			script.println("location.href = 'addNewSurvey.jsp'");
+			script.println("</script>");
+		}
+		else{
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("location.href = 'selectSurvey.jsp'");
+			script.println("</script>");
+		}
+	} catch (Exception e){
+		e.printStackTrace();
+	}
 	%>
 	<style>
 .right_align {

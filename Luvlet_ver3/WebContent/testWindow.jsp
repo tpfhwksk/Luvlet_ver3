@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
+<%@ page import="survey.SurveyDAO" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,19 +18,13 @@
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
-		if (userID == null) {
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('로그인이 필요합니다.')");
-			script.println("location.href = 'login.jsp'");
-			script.println("</script>");
-		}
 	%>
 	<style>
 .right_align {
 	margin-right: 10px;
 }
 </style>
+		
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
@@ -73,23 +69,27 @@
 			%>
 		</div>
 	</nav>
-	<form action="fileUpload.jsp" method="post" enctype="multipart/form-data">
-		<h1 id="question" align="center">첨부할 파일을 업로드 하십시오</h1>
-		<br>
-        	<div align="center">
-        		<input class="fileBtn" type="file" name="file"/>
-        		<br>
-        		<input class="submitBtn" type="submit" value="전송"/>
-        	</div>
-	</form>
-	<%
-		String my = "http://test.com";
-	%>
-	<script>
-	var myhome = "<%=my%>";
-		//alert(myhome);
-	</script>
+	<div class="container">
+	
+		<h1>를 선택하시오</h1>
+		<h1>장난감
+		<button id="btn000"><span id="choice0">전혀 아니다</span></button>
+		<button id="btn000"><span id="choice0"> 아니다</span></button>
+		<button id="btn000"><span id="choice0">보통이다</span></button>
+		<button id="btn000"><span id="choice0">그렇다</span></button>
+		<button id="btn000"><span id="choice0">매우 그렇다</span></button>
+		</h1>
+	</div>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
+	 <script>
+   		 var addBtn = document.getElementById("addSurveyBtn");
+
+   		 addBtn.onclick = function() {
+  			 location.href = "addNewSurvey.jsp";
+  		 }
+  		 
+   		 
+    </script>
 </body>
 </html>

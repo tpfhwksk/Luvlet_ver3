@@ -48,14 +48,24 @@ public class SurveyDAO {
 	}
 
 	public int writeTitle(String title) {
-		String SQL = "INSERT INTO surveytitle VALUES (?, ?, ?)";
 		try {
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext());
-			pstmt.setString(2, title);
-			pstmt.setInt(3, 1); // available
-			// rs = pstmt.executeQuery(); // insert문은 이게 필요없다.
-			pstmt.executeUpdate();
+			String alreadyExisted = "SELECT * FROM surveytitle WHERE title = ?";
+			pstmt = conn.prepareStatement(alreadyExisted);
+			pstmt.setString(1, title);
+			rs = pstmt.executeQuery();
+			if (!rs.next()) {
+				String SQL = "INSERT INTO surveytitle VALUES (?, ?, ?)";
+				pstmt = conn.prepareStatement(SQL);
+				pstmt.setInt(1, getNext());
+				pstmt.setString(2, title);
+				pstmt.setInt(3, 1); // available
+				// rs = pstmt.executeQuery(); // insert문은 이게 필요없다.
+				pstmt.executeUpdate();
+			}
+			else{
+				System.out.println("This survey is already existed!");
+				return -1;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,6 +98,10 @@ public class SurveyDAO {
 			boolean re = stmt.execute(sql);
 			stmt.close();
 			//System.out.println(rs2);
+		}
+		else{
+			System.out.println("This survey is already existed!");
+			return -1;
 		}
 	} catch(Exception e) {
 		System.out.println("db connect err : " + e);
