@@ -93,7 +93,25 @@ public class fileUploading {
 	                   * 
 	                   * System.out.println();
 	                   */
-	               } else {
+	               }   else if (question[1].equals("GR")) {
+
+	                   type = 2;
+	                   multiple = 1;
+	                   int row, col;
+	                   row = Integer.parseInt(question[2]);
+	                   col = Integer.parseInt(question[3]);
+	                   survey.add(new Survey(0,question[0], type, row, col, multiple, question[4],1));
+	                     System.out.print("title :" + question[0]);
+	                     System.out.print("  type :" + question[1] + " " +
+	                     type); System.out.print("  rwo,col :" + row+" "+col);
+	                     System.out.print("  multiple :" + question[3] + " " +
+	                     multiple);
+	                     System.out.println(" detail : " + question[4]);
+	                }
+
+	               
+	               
+	               else {
 	                  survey.add(new Survey(question[0], type));
 	                  /*
 	                   * System.out.print("title :" + question[0]);

@@ -70,15 +70,24 @@
 		</div>
 	</nav>
 	<div class="container">
-	
-		<h1>를 선택하시오</h1>
-		<h1>장난감
-		<button id="btn000"><span id="choice0">전혀 아니다</span></button>
-		<button id="btn000"><span id="choice0"> 아니다</span></button>
-		<button id="btn000"><span id="choice0">보통이다</span></button>
-		<button id="btn000"><span id="choice0">그렇다</span></button>
-		<button id="btn000"><span id="choice0">매우 그렇다</span></button>
-		</h1>
+	<h1 align="center">MSSQ</h1>
+	<hr style="margin-bottom:20px">
+		<h2>5.	어렸을 때 (12세 이전에), 얼마나 자주 탔는지 체크해 주세요.</h2>
+		<h2>자동차
+		<button id="btn000"><span class="spanClass">전혀 아니다</span></button>
+		<button id="btn000"><span class="spanClass""> 아니다</span></button>
+		<button id="btn000"><span class="spanClass"">보통이다</span></button>
+		<button id="btn000"><span class="spanClass"">그렇다</span></button>
+		<button id="btn000"><span class="spanClass"">매우 그렇다</span></button>
+		</h2>
+		<h2>버스
+		<button id="btn000"><span class="spanClass"">전혀 아니다</span></button>
+		<button id="btn000"><span class="spanClass""> 아니다</span></button>
+		<button id="btn000"><span class="spanClass"">보통이다</span></button>
+		<button id="btn000"><span class="spanClass"">그렇다</span></button>
+		<button id="btn000"><span class="spanClass"">매우 그렇다</span></button>
+		</h2>
+		<hr style="margin-bottom:20px">
 	</div>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>

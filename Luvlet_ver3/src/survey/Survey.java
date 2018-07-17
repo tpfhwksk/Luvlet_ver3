@@ -9,6 +9,8 @@ public class Survey {
 	private int surveyType;
 	private int surveyScale;
 	private int surveyMultiple;
+	private int surveyRow;
+	private int surveyCol;
 	private String surveyDetail;
 	private int surveyAvailable;
 	
@@ -27,6 +29,17 @@ public class Survey {
 	      this.surveyType = type;
 
 	   }// 설문지 전체 설명이랑 서술형 문항 위한 생성자
+	   
+	   public Survey(int num,String content, int type, int row, int col, int multiple, String detail,int available) {
+		      this.surveyNum = num;
+		      this.surveyContent = content;
+		      this.surveyType = type;
+		      this.surveyRow = row;
+		      this.surveyCol = col;
+		      this.surveyMultiple = multiple;
+		      this.surveyDetail = detail;
+		      this.surveyAvailable = available;
+		   } // 그리드 형식의 설문지를 위한 생성자
 	
 	public Survey() {
 		// TODO Auto-generated constructor stub
