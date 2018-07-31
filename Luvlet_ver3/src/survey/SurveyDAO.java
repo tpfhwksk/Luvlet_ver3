@@ -1,5 +1,7 @@
 package survey;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -72,6 +74,7 @@ public class SurveyDAO {
 		
 		try{
 		String titleWithNoSpace = title.replaceAll(" ", "_"); // 테이블 명으로 공백은 넣을 수 없다. 가상현실_관련_경험_설문지
+		titleWithNoSpace = titleWithNoSpace.replaceAll("-", "_"); // - 이거는 데베 인식 x. 예)SCL-90-R -> SCL_90_R
 		String tableSql = "SELECT table_name FROM information_schema.tables where table_schema = ? and table_name = ?";
 		pstmt2 = conn.prepareStatement(tableSql);
 		pstmt2.setString(1, "LUVLET");
@@ -175,25 +178,49 @@ public class SurveyDAO {
 		return -1; // 데이터베이스 오류
 	}
 
-	public int resultWrite(String title, String userID, String choiceArray, String timeArray){
-		String titleWithNoSpace = title.replaceAll(" ", "_");
-		titleWithNoSpace += "_결과";
-		String SQL = "INSERT INTO " + titleWithNoSpace + " VALUES (?, ?, ?, ?)";
-		int nextNum = getNextInResult(title);
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, nextNum);
-			pstmt.setString(2, userID);
-			pstmt.setString(3, choiceArray);
-			pstmt.setString(4, timeArray);
-			//rs = pstmt.executeQuery(); // insert문은 이게 필요없다.
-			return pstmt.executeUpdate();
-		} catch (Exception e) {
-			System.out.println("db connect err : " + e);
-			e.printStackTrace();
-		}
-		return -1; // 데이터베이스 오류
-	}
+	public int resultWrite(String title, String userID, String choiceArray, String timeArray,String userName,String userBirthday,String userGender){
+	      String titleWithNoSpace = title.replaceAll(" ", "_");
+	      titleWithNoSpace += "_결과";
+	      String SQL = "INSERT INTO " + titleWithNoSpace + " VALUES (?, ?, ?, ?)";
+	      //String fileName = "C:\\result\\"+userID+"_"+userName+"_"+title+".txt";
+	      String fileName = "C:\\Users\\수진\\Desktop\\뜰레링\\졸프\\surveyResult\\"+userID+"_"+userName+"_"+title+".txt";
+	      int nextNum = getNextInResult(title);
+	      try {
+	         BufferedWriter fw = new BufferedWriter(new FileWriter(fileName, true));
+	         fw.write("ID :"+userID+"\t");
+	         fw.write("Name :"+userName+"\t");
+	         fw.newLine();
+	         fw.write("Birthday :"+userBirthday+"\t");
+	         fw.write("Gender :"+userGender+"\t");
+	         fw.newLine();
+	         fw.newLine();
+	         String [] choice = choiceArray.split(",");
+	         String [] time = timeArray.split(",");
+	         fw.write("num"+"\t");
+	         fw.write("result"+"\t");
+	         fw.write("reaction time");
+	         fw.newLine();
+	         for (int i=0;i<choice.length;i++)
+	         {
+	            fw.write((i+1)+"\t"+choice[i]+"\t"+time[i]);
+	            fw.newLine();
+	         }
+	 
+	         fw.close();
+	         
+	         PreparedStatement pstmt = conn.prepareStatement(SQL);
+	         pstmt.setInt(1, nextNum);
+	         pstmt.setString(2, userID);
+	         pstmt.setString(3, choiceArray);
+	         pstmt.setString(4, timeArray);
+	         //rs = pstmt.executeQuery(); // insert문은 이게 필요없다.
+	         return pstmt.executeUpdate();
+	      } catch (Exception e) {
+	         System.out.println("db connect err : " + e);
+	         e.printStackTrace();
+	      }
+	      return -1; // 데이터베이스 오류
+	   }
 	
 	public int write(String title, int num, String content, int type){
 		String titleWithNoSpace = title.replaceAll(" ", "_");

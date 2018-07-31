@@ -3,6 +3,7 @@
 <%@ page import="java.io.PrintWriter"%>
 <% request.setCharacterEncoding("UTF-8"); %>
 <%@ page import="survey.SurveyDAO" %>
+<%@ page import="user.UserDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
@@ -24,16 +25,19 @@
   		 String choiceArray = request.getParameter("choiceArray");
       	 String timeArray = request.getParameter("timeArray");
          String surveyTitle = request.getParameter("surveyTitle");
+         String tTime = request.getParameter("totalTime");
 	%>
 	
 	<script>
    	var tmp ="<%=choiceArray%>";
    	var tmp2 = "<%=timeArray%>";
    	var tmp3 = "<%=surveyTitle%>";
+   	var tmp4 = "<%=tTime%>";
    	tmp3 += "_결과";
   	 document.write("choice Array: " + tmp + "<br>");
  	 document.write("Response Time Array: " + tmp2);
  	 document.write("Title: " + tmp3);
+ 	document.write("total Time: " + tmp4);
 
 		
 	</script>
@@ -51,8 +55,13 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else {
-				SurveyDAO surveyDAO = new SurveyDAO();
-				int result = surveyDAO.resultWrite(surveyTitle, userID, choiceArray, timeArray);
+			SurveyDAO surveyDAO = new SurveyDAO();
+			UserDAO userDAO = new UserDAO();
+            String userName = userDAO.getName(userID);
+            String userBirthday = userDAO.getBirthday(userID);
+            String userGender = userDAO.getGender(userID);
+            
+            int result = surveyDAO.resultWrite(surveyTitle, userID, choiceArray, timeArray, userName,userBirthday,userGender);
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
 					script.println("<script>");

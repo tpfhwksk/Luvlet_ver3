@@ -2,13 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="java.io.*"%>
-<%@ page import="survey.surveyTitle" %>
-<%@ page import="survey.SurveyDAO" %>
-<%@ page import="survey.Survey" %>
-<%@ page import="java.util.ArrayList" %>
-<% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="surveytitle" class="survey.surveyTitle" scope="page"/>
-<jsp:setProperty name="surveytitle" property="title"/>
+<%@ page import="survey.surveyTitle"%>
+<%@ page import="survey.SurveyDAO"%>
+<%@ page import="survey.Survey"%>
+<%@ page import="java.util.ArrayList"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<jsp:useBean id="surveytitle" class="survey.surveyTitle" scope="page" />
+<jsp:setProperty name="surveytitle" property="title" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +22,7 @@
 <title>Luvlet</title>
 </head>
 <body>
-<script>
+	<script>
 var questions = [];
 var finalIndex = 0;
 </script>
@@ -37,12 +39,12 @@ var finalIndex = 0;
 			script.println("</script>");
 		}
 	%>
-<style>
+	<style>
 .right_align {
 	margin-right: 10px;
 }
 </style>
-		
+
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
@@ -87,42 +89,51 @@ var finalIndex = 0;
 			%>
 		</div>
 	</nav>
-				<%
-					SurveyDAO surveydao = new SurveyDAO();
-					//bbsDAO.countNum();
-					ArrayList<Survey> list = surveydao.getList(surveytitle.getTitle());
-				%>
-				
-				<script>
+	<%
+		SurveyDAO surveydao = new SurveyDAO();
+		//bbsDAO.countNum();
+		ArrayList<Survey> list = surveydao.getList(surveytitle.getTitle());
+	%>
+
+	<script>
 				finalIndex = <%=list.size()%> - 1;
 				//alert(finalIndex);
 				</script>
-	
-	<% for(int i=1; i <list.size(); i++){
-        	%>
-        	<script>
+
+	<%
+		for (int i = 1; i < list.size(); i++) {
+	%>
+	<script>
         	<%-- alert(<%=i%>);
         	alert("<%=list.get(i).getSurveyContent()%>"); --%>
         	var question = new Question(<%=list.get(i).getSurveyNum()%>, "<%=list.get(i).getSurveyContent()%>", <%=list.get(i).getSurveyType()%>, <%=list.get(i).getSurveyScale()%>, <%=list.get(i).getSurveyMultiple()%>, "<%=list.get(i).getSurveyDetail()%>" );
        		questions.push(question);
         	</script>
-        	<%
-        }
-        	%>
-        	
-  
+	<%
+		}
+	%>
+
+
 	<div class="container">
-		 <div id="survey">
-		  <h1 align="center"><% out.println(surveytitle.getTitle()); %></h1>
-		  <hr style="margin-bottom:20px">
-        <h2><%=list.get(0).getSurveyContent()%></h2>
-        <hr style="margin-bottom:20px">
-       
-        
-        <p id="question"></p>
-        <div align="center"><button id="startBtn"><span>START</span></button></div>
-        <div id="buttons" align="center"></div>
-        <!-- 
+		<div id="survey">
+			<h1 align="center">
+				<%
+					out.println(surveytitle.getTitle());
+				%>
+			</h1>
+			<hr style="margin-bottom: 20px">
+			<h2><%=list.get(0).getSurveyContent()%></h2>
+			<hr style="margin-bottom: 20px">
+
+
+			<p id="question"></p>
+			<div align="center">
+				<button id="startBtn">
+					<span>START</span>
+				</button>
+			</div>
+			<div id="buttons" align="center"></div>
+			<!-- 
           <button id="backBtn"><span>이전 문항</span></button>
         	
         <hr style="margin-top: 50px">
@@ -130,29 +141,23 @@ var finalIndex = 0;
           <p id="progress">Question x of y.</p>
           
         </footer> -->
-      </div>
+		</div>
 	</div>
-	<%!
-	public void printTest(int head, javax.servlet.jsp.JspWriter out) 
-			throws ServletException 
-			{ 
-			try 
-			{ 
-				out.println(head); 
-				
-			} 
-			catch (Exception e){} 
-			} 
+	<%!public void printTest(int head, javax.servlet.jsp.JspWriter out) throws ServletException {
+		try {
+			out.println(head);
 
-	%>
+		} catch (Exception e) {
+		}
+	}%>
 
-	
-	<% String my="http://test.com"; 
+
+	<%
+		String my = "http://test.com";
 		int questionIndexJAVA = 0;
-		
+
 		int a = 1;
 		a = a + 1;
-		
 	%>
 	<script>
 	var myhome = "<%=my%>";
@@ -167,6 +172,7 @@ var finalIndex = 0;
 		var score = 0;
    		 var startBtn = document.getElementById("startBtn");
    		 var mChoicesList = [];
+   		var tStart = new Date().getTime(); 
 
    		 startBtn.onclick = function() {
    		  	var surveyHTML = "<h1 align=\"center\">" + "<%=surveytitle.getTitle()%>" + "</h1>";
@@ -238,8 +244,14 @@ var finalIndex = 0;
    		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(questions[questionIndex-1].multiple === 0){ //한개만 선택가능 (버튼 일자로 나열)
-   		  				var tmpBtn = document.getElementById('btn' + i);
-   		  				tmpBtn.style.width = 100 / (questions[questionIndex-1].scale + 1)  + '%';
+   		  			 	if(questions[questionIndex-1].scale > 10){
+                        	 var tmpBtn = document.getElementById('btn' + i);
+                      		 tmpBtn.style.width = 100 / 6  + '%';
+                      	}
+   		  			 	else{
+   		  			 		var tmpBtn = document.getElementById('btn' + i);
+   		  					tmpBtn.style.width = 100 / (questions[questionIndex-1].scale + 1)  + '%';
+   		  			 	}
    		  			}
    		  			else{ // 중복 선택(버튼 일자로 굳이 안해도 됨)
    		  				var tmpBtn = document.getElementById('btn' + i);
@@ -250,11 +262,15 @@ var finalIndex = 0;
    		  		if(detailList.length === questions[questionIndex-1].scale) {
    		  			for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  				document.getElementById("choice" + i).innerHTML = detailList[i];
+   		  				if(0 === questions[questionIndex-1].multiple){
+   		  					guess("btn" + i, i);
+   		  				}
    		  			}
    		  		}
    		  		else{
 	   		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
 					 	document.getElementById("choice" + i).innerHTML = i;
+					
 					 	guess("btn" + i, i);
 			  		}
    		  		}
@@ -318,7 +334,7 @@ var finalIndex = 0;
    		  		
    		    }
    		    else { // 주관식
-   		    	var surveyHTML = " ";
+   		    	/* var surveyHTML = " ";
    		    	surveyHTML += '<form method="post" action="surveyResult.jsp">';
    		    	surveyHTML += '<h3 style="text-align: center;">주관식</h3>';
    		    	surveyHTML += '<div class="form-group">';
@@ -328,7 +344,20 @@ var finalIndex = 0;
 				surveyHTML += '</form>'
 				document.getElementById("buttons").innerHTML = surveyHTML;
 				
-				guess("btn0", 0);
+				guess("btn0", 0); */
+				// 동환 부분 시작
+		            var surveyHTML = " ";
+		            //surveyHTML += '<form method="post" action="surveyResult.jsp">';
+		            //surveyHTML += '<form>';
+		            surveyHTML += '<h3 style="text-align: center;">주관식</h3>';
+		            surveyHTML += '<div class="form-group">';
+		            surveyHTML += '<input type="text" id="input" class="form-control" placeholder="내용을 입력해주세요." NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+		            surveyHTML += '</div>';
+		            surveyHTML += '<button id="btn0"><span id="choice0">다음 문항</span></button>';
+		            //surveyHTML += '</form>';
+		            document.getElementById("buttons").innerHTML = surveyHTML;
+		            s_guess("btn0", 0);
+		            //동환 끝
 				if(questionIndex != 1){
 					document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
 				}
@@ -342,17 +371,93 @@ var finalIndex = 0;
    		  }
    		  
    		}
+   		
+   		function s_guess(id, idx) { // btn0, 0
+            
+            if(questionIndex === finalIndex){
+               var button = document.getElementById(id);
+               var nStart = new Date().getTime(); 
+               
+               button.onclick = function() {
+               
+                  var input =document.getElementById("input").value;
+                  //alert(input);
+                  //alert(questionIndex);
+                  var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+                var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+                  if(finalIsClicked === 1 || choiceArray.length === questionIndex){
+                          choiceArray[questionIndex - 1] = input;
+                          responseTimeArray[questionIndex - 1] = nDiff + "ms";
+                       }
+                       else{
+                        choiceArray.push(input);
+                    responseTimeArray.push(nDiff + "ms");
+                       }
+                       
+                       //questionIndex++;
+                       finalIsClicked = 1;
+                     this.style.backgroundColor = "#57636e";
+                     var btns = [];
+                     for(var i = 0 ;i < questions[questionIndex-1].scale; i++){
+                        btns.push(document.getElementById("btn" + i));
+                     
+                     }
+                     for(var i = 0; i < questions[questionIndex-1].scale; i++){
+                        if(idx != i){
+                           btns[i].style.backgroundColor = "#778897";
+                        }
+                     }
+                  }
+            }
+            else{
+                 var button = document.getElementById(id);
+                 var nStart = new Date().getTime(); 
+         
+                 button.onclick = function() {
+                   var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+                   var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+                   var input =document.getElementById("input").value;
+               
+                   //alert(typeof input);
+               
+                  if(choiceArray.length > questionIndex || choiceArray.length === questionIndex ){
+                   
+                     choiceArray[questionIndex - 1] = input;
+                    responseTimeArray[questionIndex - 1] = nDiff + "ms";
+                  //alert("case1"+ responseTimeArray.length);
+                  }
+                    else{
+                    score = score + idx;
+                    choiceArray.push(input);
+                    responseTimeArray.push(nDiff + "ms");
+                  //alert("case2"+responseTimeArray.length);
+                    }
+                    questionIndex++;
+             
+                   //alert("popul");
+                  //alert(nDiff + "ms");
+                      populate();
+                 }
+            }
+         }
 		
    		function guess(id, idx) { // btn0, 0
    			if(questionIndex === finalIndex){
+   			
    				var button = document.getElementById(id);
-   				
+   				var nStart = new Date().getTime(); 
+
    				button.onclick = function() {
+   					var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+                	var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+
    		   		  	if(finalIsClicked === 1 || choiceArray.length === questionIndex){
    		   		  		choiceArray[questionIndex - 1] = idx;
+   		   		 		responseTimeArray[questionIndex - 1] = nDiff + "ms";
    		   		  	}
    		   		  	else{
  		   			  	choiceArray.push(idx);
+ 		   				responseTimeArray.push(nDiff + "ms");
    		   		  	}
    		   		  	
    		   		  	//questionIndex++;
@@ -378,8 +483,9 @@ var finalIndex = 0;
    		 			var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
    		 			var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
    		 			
-   					if(choiceArray.length > questionIndex){
-   					  choiceArray[questionIndex - 1] = idx;
+   		 			
+   					if(choiceArray.length > questionIndex || choiceArray.length === questionIndex){
+   					  choiceArray[questionIndex - 1] = idx; 
    					  responseTimeArray[questionIndex - 1] = nDiff + "ms";
    		 	 		}
    		  			else{
@@ -468,7 +574,6 @@ var finalIndex = 0;
        					  mChoicesList[i].choiceList = [];
        				  	}
        			 	 }
-     				 
      				  populate();
      			  }
      			  else{
@@ -488,6 +593,7 @@ var finalIndex = 0;
      				 }
      				var nEnd =  new Date().getTime();
     				var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+    				var tDiff = nEnd - tStart;
      				if(choiceArray.length > questionIndex){
      				 	choiceArray[questionIndex - 1] = x;
      				 	responseTimeArray[questionIndex - 1] = nDiff + "ms";
@@ -547,23 +653,36 @@ var finalIndex = 0;
    		  gameOverHtml += "<h2>정말로 제출하시겠습니까?</h2>";
    		  gameOverHtml += "<br>";
    		  var sum = 0;
+   		  
    		  alert(choiceArray);
    		  for(var i = 0; i < choiceArray.length; i++){
    			  sum += choiceArray[i];
    		  }
+   			var nEnd =  new Date().getTime(); 
+   			var tDiff = nEnd - tStart;
    		  //alert(sum);
         	gameOverHtml +='<form name ="send" action="resultAction.jsp" method = "post">';
         	gameOverHtml +='<input type ="hidden" name="choiceArray" value="">';
         	gameOverHtml +='<input type ="hidden" name="timeArray" value="">';
         	gameOverHtml +='<input type ="hidden" name="surveyTitle" value="">';
+        	gameOverHtml +='<input type ="hidden" name="totalTime" value="">';
         	gameOverHtml +='<button class="reallySubmitBtn" name="sbm" id="sbm" value="choiceArr"><span class="spanClass">제출하기</span></button>';
-   			gameOverHtml +="</form>";
+        	gameOverHtml +='<button class="reallySubmitBtn" name="back" id="back" onclick="window.location.href=\'selectSurvey.jsp\'"><span class="spanClass">돌아가기</span></button>';
+        	gameOverHtml +="</form>";
+   			
+   	
    			
    		  	document.getElementById("survey").innerHTML = gameOverHtml;
+   		  	
+   		 backBtn = document.getElementById("back");
+			backBtn.addEventListener("click", function(){
+				window.location.href = "selectSurvey.jsp";
+			})
+   		  	
    			document.send.choiceArray.value=choiceArray;
    			document.send.timeArray.value=responseTimeArray;
    			document.send.surveyTitle.value = title;
-   			
+   			document.send.totalTime.value = tDiff;
    		  
    		}
    		

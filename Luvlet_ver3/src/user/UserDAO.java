@@ -61,4 +61,65 @@ public class UserDAO {
 		return -1; // 데베 오류
 	}
 	
+	public String getName(String userID) {
+	      String SQL = "SELECT userName FROM USER WHERE userID = ?";
+	      try {
+	         pstmt = conn.prepareStatement(SQL);
+	         pstmt.setString(1, userID);
+	         rs = pstmt.executeQuery();
+	         if (rs.next()) { // 나온 정보가 있다면
+	            
+	               return rs.getString(1); // 로그인 성공
+	            }
+	            else 
+	               return "error"; // 비밀번호 불일치
+	         
+	         
+	      }catch (Exception e){
+	         e.printStackTrace();
+	      }
+	   
+	      return "error"; // 데베 오류
+	   }
+	   public String getBirthday(String userID) {
+	      String SQL = "SELECT userBirthday FROM USER WHERE userID = ?";
+	      try {
+	         pstmt = conn.prepareStatement(SQL);
+	         pstmt.setString(1, userID);
+	         rs = pstmt.executeQuery();
+	         if (rs.next()) { // 나온 정보가 있다면
+	            
+	               return rs.getString(1); // 로그인 성공
+	            }
+	            else 
+	               return "error"; // 비밀번호 불일치
+	         
+	         
+	      }catch (Exception e){
+	         e.printStackTrace();
+	      }
+	   
+	      return "error"; // 데베 오류
+	   }
+	   public String getGender(String userID) {
+	      String SQL = "SELECT userGender FROM USER WHERE userID = ?";
+	      try {
+	         pstmt = conn.prepareStatement(SQL);
+	         pstmt.setString(1, userID);
+	         rs = pstmt.executeQuery();
+	         if (rs.next()) { // 나온 정보가 있다면
+	            
+	               return rs.getString(1); // 로그인 성공
+	            }
+	            else 
+	               return "error"; // 비밀번호 불일치
+	         
+	         
+	      }catch (Exception e){
+	         e.printStackTrace();
+	      }
+	   
+	      return "error"; // 데베 오류
+	   }
+	   
 }
