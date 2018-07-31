@@ -348,8 +348,28 @@ var finalIndex = 0;
 				 else{
 					document.getElementById("backAndmultiBtn").innerHTML = "";
 				 }
-				 document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
-				 s_guess("SAnextBtn", 0);
+				/*  if(questionIndex === finalIndex){ //마지막 문항일 때 
+		        		var gameOverHtml = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
+		        		gameOverHtml += "<button class=\"resultSubmitBtn\" id=\"toResult\"><span class=\"spanClass\">끝내기</span></button>"; 
+		        		document.getElementById("backAndmultiBtn").innerHTML = gameOverHtml;
+		        		document.getElementById("toResult").addEventListener("click", js);
+		        		  function js() {
+		        		    if(finalIsClicked === 0){
+		        		    	alert("답을 선택해주세요.")
+		        		    }
+		        		    else{
+		        		    	 showScores();
+		        		    }
+		        		  }
+		  			} */
+		  		 if(questionIndex === finalIndex){
+  	   		        document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">끝내기</span></button>';
+					s_guess("SAnextBtn", 0);
+		  		 }
+		  		 else{
+				 	document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
+				 	s_guess("SAnextBtn", 0);
+		  		 }
 			}
    			//surveyHTML += '<button name="title" id="title" value="subjective' +  questions[questionIndex-1].num + '><span>작성완료</span></button>';
    		    backButton();
@@ -361,7 +381,7 @@ var finalIndex = 0;
    		function s_guess(id, idx) { // 주관식
             
             if(questionIndex === finalIndex){ //마지막 문항
-               var button = document.getElementById(id); // 다음 문항 버튼
+               var button = document.getElementById(id); // 끝내기 버튼
                var nStart = new Date().getTime(); 
                
                button.onclick = function() {
@@ -371,9 +391,7 @@ var finalIndex = 0;
                 	  alert("한 글자 이상 입력해주십시오");
                 	  populate();
                   }
-                  //alert(input);
-                  //alert(questionIndex);
-                  else{ // 입력이 공백이 아닌 경우
+                  else{ // 입력이 공백이 아닌 경우 결과창으로 가야함
                  	var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
                	  	var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
                   	if(finalIsClicked === 1 || choiceArray.length === questionIndex){
@@ -387,8 +405,9 @@ var finalIndex = 0;
                        
                        //questionIndex++;
                   	finalIsClicked = 1;
-                  	this.style.backgroundColor = "#57636e";
-                  	var btns = [];
+                  	
+                  	showScores();
+                  	/* var btns = [];
                   	for(var i = 0 ;i < questions[questionIndex-1].scale; i++){
                         btns.push(document.getElementById("btn" + i));
                   	}
@@ -396,7 +415,7 @@ var finalIndex = 0;
                         if(idx != i){
                            btns[i].style.backgroundColor = "#778897";
                         }
-                  	}
+                  	} */
                   }
                 }
             }
@@ -440,11 +459,51 @@ var finalIndex = 0;
 		
    		function guess(id, idx) { // btn0, 0
    			if(questionIndex === finalIndex){
-   			
-   				var button = document.getElementById(id);
-   			
    				var nStart = new Date().getTime(); 
+   				var button = document.getElementById(id);
+   				var etcButton;
+   				var spanDetail = document.getElementById('choice' + idx).innerHTML;
+   				//alert(spanDetail); 잘 나옴
+   				if(spanDetail === "기타"){
+   					button.onclick = function(){ //기타 버튼
+   						
+   						if(this.style.backgroundColor != "#57636e"){
+   	   	   					var etcHTML = '<div class="form-group">';
+   	   	   		        	etcHTML += '<input type="text" id="input" class="form-control" placeholder="기타" NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+   	   	   		         	etcHTML += '</div>';
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML = etcHTML;
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML += "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
 
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">끝내기</span></button>';
+   	   	   		      		
+   	   	     			}
+   		   				
+   	   					this.style.backgroundColor = "#57636e";
+   	   					var btns = [];
+   		   				for(var i = 0 ;i < questions[questionIndex-1].scale; i++){
+   	     		 			btns.push(document.getElementById("btn" + i));
+   	     		 		}
+   	     				for(var i = 0; i < questions[questionIndex-1].scale; i++){
+   	     					if(idx != i){
+   	     						btns[i].style.backgroundColor = "#778897";
+   	     			 		}
+   	     			 	}
+   	     				
+	        			
+   	   		    		//기타 버튼을 선택해서 주관식 창이 나타나더라도 다른 버튼(뒤로가기 버튼 포함) 선택하면 바로 다음 문항으로 넘어갈 수 있게함
+   	   		     		for(var i = 0; i < questions[questionIndex-1].scale; i++){ 
+ 		  					if(0 === questions[questionIndex-1].multiple){
+ 		  						guess("btn" + i, i);
+ 		  					}
+ 		  				}
+                  		backButton();
+                  		
+                  		s_guess("SAnextBtn", 0);
+   					}
+   				}
+   				else{
+   				
+   				
    				button.onclick = function() {
    					var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
                 	var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
@@ -471,9 +530,24 @@ var finalIndex = 0;
    	     					 btns[i].style.backgroundColor = "#778897";
    	     			 	}
    	     			 }
+   	     			var gameOverHtml = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
+        			gameOverHtml += "<button class=\"resultSubmitBtn\" id=\"toResult\"><span class=\"spanClass\">끝내기</span></button>"; 
+        			document.getElementById("backAndmultiBtn").innerHTML = gameOverHtml;
+        			
+        			document.getElementById("toResult").addEventListener("click", js);
+	        		  function js() {
+	        			  
+	        		    if(finalIsClicked === 0){
+	        		    	alert("답을 선택해주세요.")
+	        		    }
+	        		    else{
+	        		    	 showScores();
+	        		    }
+	        		  }
    	     	 	}
    			}
-   			else{
+   			}
+   			else{ // 마지막 문항이 아닐 경우
    		  		var button;
    		  		var etcButton;
    		  		var nStart = new Date().getTime(); 
@@ -485,15 +559,18 @@ var finalIndex = 0;
    					etcButton = document.getElementById(id);
    					
    					etcButton.onclick = function(){ //기타 버튼
+   						if(this.style.backgroundColor != "#57636e"){
+   	   	   					var etcHTML = '<div class="form-group">';
+   	   	   		        	etcHTML += '<input type="text" id="input" class="form-control" placeholder="기타" NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+   	   	   		         	etcHTML += '</div>';
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML = etcHTML;
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML += "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
+
+   	   	   		         	document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
+   	   	   		      		
+   	   	     			}
    		   				
    	   					this.style.backgroundColor = "#57636e";
-   	   					var etcHTML = '<div class="form-group">';
-   	   		        	etcHTML += '<input type="text" id="input" class="form-control" placeholder="기타" NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
-   	   		         	etcHTML += '</div>';
-   	   		         	document.getElementById("buttons").innerHTML += etcHTML;
-   	   		         	document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
-   					 	
-   	   		         
    	   		         	
    	   		    		//기타 버튼을 선택해서 주관식 창이 나타나더라도 다른 버튼(뒤로가기 버튼 포함) 선택하면 바로 다음 문항으로 넘어갈 수 있게함
    	   		     		for(var i = 0; i < questions[questionIndex-1].scale; i++){ 
