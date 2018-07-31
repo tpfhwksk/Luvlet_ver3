@@ -159,6 +159,17 @@ h3 {
   padding: 10px 10px;
 }
 
+#SAnextBtn {
+  background-color: #EAEAEA;
+  float: right;
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  border: 1px solid #1d3c6a;
+  /*margin: 10px 0px 20px 0px;*/
+  padding: 10px 10px;
+}
+
 .resultSubmitBtn{
   background-color: #EAEAEA;
   float: right;
@@ -208,12 +219,12 @@ h3 {
   padding: 10px 10px;
 }
 
-#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover, #btn4:hover, #btn5:hover, #btn6:hover, #btn7:hover, #btn8:hover, #btn9:hover, #btn10:hover, #btn11:hover, #addSurveyBtn:hover, #startBtn:hover, #backBtn:hover, #localBtn:hover, #fileBtn:hover, #title:hover {
+#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover, #btn4:hover, #btn5:hover, #btn6:hover, #btn7:hover, #btn8:hover, #btn9:hover, #btn10:hover, #btn11:hover, #btn12:hover, #btn13:hover, #btn14:hover, #btn15:hover, #addSurveyBtn:hover, #startBtn:hover, #backBtn:hover, #localBtn:hover, #fileBtn:hover, #title:hover {
   cursor: pointer;
   background-color: #57636e;
 }
 
-#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus, #btn4:focus, #btn5:focus, #btn6:focus, #btn7:focus, #btn8:focus, #btn9:focus, #btn10:focus, #btn11:focus, #addSurveyBtn:focus, #startBtn:focus, #backBtn:focus, #title:focus {
+#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus, #btn4:focus, #btn5:focus, #btn6:focus, #btn7:focus, #btn8:focus, #btn9:focus, #btn10:focus, #btn11:focus, #btn12:focus, #btn13:focus, #btn14:focus, #btn15:focus, #addSurveyBtn:focus, #startBtn:focus, #backBtn:focus, #title:focus {
   outline: 0;
 }
 

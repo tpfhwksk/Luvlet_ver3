@@ -346,24 +346,26 @@ var finalIndex = 0;
 				
 				guess("btn0", 0); */
 				// 동환 부분 시작
-		            var surveyHTML = " ";
+		         var surveyHTML = " ";
 		            //surveyHTML += '<form method="post" action="surveyResult.jsp">';
 		            //surveyHTML += '<form>';
-		            surveyHTML += '<h3 style="text-align: center;">주관식</h3>';
-		            surveyHTML += '<div class="form-group">';
-		            surveyHTML += '<input type="text" id="input" class="form-control" placeholder="내용을 입력해주세요." NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
-		            surveyHTML += '</div>';
-		            surveyHTML += '<button id="btn0"><span id="choice0">다음 문항</span></button>';
-		            //surveyHTML += '</form>';
-		            document.getElementById("buttons").innerHTML = surveyHTML;
-		            s_guess("btn0", 0);
-		            //동환 끝
-				if(questionIndex != 1){
-					document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span>이전 문항</span></button>";
-				}
-				else{
+		         surveyHTML += '<h3 style="text-align: center;">주관식</h3>';
+		         surveyHTML += '<div class="form-group">';
+		         surveyHTML += '<input type="text" id="input" class="form-control" placeholder="내용을 입력해주세요." NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+		         surveyHTML += '</div>';
+		         //surveyHTML += '<button id="btn0"><span id="choice0">다음 문항</span></button>';
+		         //surveyHTML += '</form>';
+		         document.getElementById("buttons").innerHTML = surveyHTML;
+		         //s_guess("btn0", 0);
+		         //동환 끝
+				 if(questionIndex != 1){
+					document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
+				 }
+				 else{
 					document.getElementById("backAndmultiBtn").innerHTML = "";
-				}
+				 }
+				 document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
+				 s_guess("SAnextBtn", 0);
 			}
    			//surveyHTML += '<button name="title" id="title" value="subjective' +  questions[questionIndex-1].num + '><span>작성완료</span></button>';
    		    backButton();
@@ -372,42 +374,47 @@ var finalIndex = 0;
    		  
    		}
    		
-   		function s_guess(id, idx) { // btn0, 0
+   		function s_guess(id, idx) { // 주관식
             
-            if(questionIndex === finalIndex){
-               var button = document.getElementById(id);
+            if(questionIndex === finalIndex){ //마지막 문항
+               var button = document.getElementById(id); // 다음 문항 버튼
                var nStart = new Date().getTime(); 
                
                button.onclick = function() {
                
                   var input =document.getElementById("input").value;
+                  if(input.trim() == "" || input == null){ //입력이 공백인 경우
+                	  alert("한 글자 이상 입력해주십시오");
+                	  populate();
+                  }
                   //alert(input);
                   //alert(questionIndex);
-                  var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
-                var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
-                  if(finalIsClicked === 1 || choiceArray.length === questionIndex){
-                          choiceArray[questionIndex - 1] = input;
-                          responseTimeArray[questionIndex - 1] = nDiff + "ms";
-                       }
-                       else{
-                        choiceArray.push(input);
-                    responseTimeArray.push(nDiff + "ms");
-                       }
+                  else{ // 입력이 공백이 아닌 경우
+                 	var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+               	  	var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+                  	if(finalIsClicked === 1 || choiceArray.length === questionIndex){
+                    	 choiceArray[questionIndex - 1] = input;
+                      	 responseTimeArray[questionIndex - 1] = nDiff + "ms";
+                 	}
+                  	else{
+                  	     choiceArray.push(input);
+                    	 responseTimeArray.push(nDiff + "ms");
+                  	}
                        
                        //questionIndex++;
-                       finalIsClicked = 1;
-                     this.style.backgroundColor = "#57636e";
-                     var btns = [];
-                     for(var i = 0 ;i < questions[questionIndex-1].scale; i++){
+                  	finalIsClicked = 1;
+                  	this.style.backgroundColor = "#57636e";
+                  	var btns = [];
+                  	for(var i = 0 ;i < questions[questionIndex-1].scale; i++){
                         btns.push(document.getElementById("btn" + i));
-                     
-                     }
-                     for(var i = 0; i < questions[questionIndex-1].scale; i++){
+                  	}
+                  	for(var i = 0; i < questions[questionIndex-1].scale; i++){
                         if(idx != i){
                            btns[i].style.backgroundColor = "#778897";
                         }
-                     }
+                  	}
                   }
+                }
             }
             else{
                  var button = document.getElementById(id);
@@ -417,26 +424,32 @@ var finalIndex = 0;
                    var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
                    var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
                    var input =document.getElementById("input").value;
+                   
+                   if(input.trim() == "" || input == null){ // 입력 값이 공백일 경우
+                 	  alert("한 글자 이상 입력해주십시오");
+                 	  populate();
+                   }
                
                    //alert(typeof input);
-               
-                  if(choiceArray.length > questionIndex || choiceArray.length === questionIndex ){
+                   else{ // 입력 값이 공백이 아닌 경우
+                  	  if(choiceArray.length > questionIndex || choiceArray.length === questionIndex ){
                    
-                     choiceArray[questionIndex - 1] = input;
-                    responseTimeArray[questionIndex - 1] = nDiff + "ms";
-                  //alert("case1"+ responseTimeArray.length);
-                  }
-                    else{
-                    score = score + idx;
-                    choiceArray.push(input);
-                    responseTimeArray.push(nDiff + "ms");
-                  //alert("case2"+responseTimeArray.length);
-                    }
-                    questionIndex++;
+                      	choiceArray[questionIndex - 1] = input;
+                      	responseTimeArray[questionIndex - 1] = nDiff + "ms";
+                  		//alert("case1"+ responseTimeArray.length);
+                      }
+                      else{
+                        score = score + idx;
+                    	choiceArray.push(input);
+                    	responseTimeArray.push(nDiff + "ms");
+                  		//alert("case2"+responseTimeArray.length);
+                      }
+                      questionIndex++;
              
-                   //alert("popul");
-                  //alert(nDiff + "ms");
+                      //alert("popul");
+                      //alert(nDiff + "ms");
                       populate();
+                   }
                  }
             }
          }
@@ -501,7 +514,6 @@ var finalIndex = 0;
    		 		 }
    			}
    		}
-   		
    		
    		var onClick = 0;
    		var onClickList = [];
