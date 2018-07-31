@@ -231,9 +231,7 @@ var finalIndex = 0;
    		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(1 === questions[questionIndex-1].multiple){
-   		  				
    		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span class=\"spanClass\" id=\"choice" + i + "\"></span></button>";
-   		
    		  			}
    		  			else{
    		  				surveyHTML += "<button id=\"btn" + i + "\" width =(100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
@@ -275,12 +273,6 @@ var finalIndex = 0;
 			  		}
    		  		}
    		  		
-   		  		/*
-   		  		gameOverHtml +='<form name ="send" action="resultAction.jsp" method = "post">';
-        		gameOverHtml +='<input type ="hidden" name="choiceArray" value="">';
-        		gameOverHtml +='<input type ="submit" value="send">';    
-   		  		*/
-   		  		
    		  		if(1 === questions[questionIndex-1].multiple){ //중복 선택 가능할 때
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
    		  		
@@ -300,17 +292,7 @@ var finalIndex = 0;
    		  		else{
    		  			document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
    		  			//alert("이전");
-   		  			if(questionIndex === finalIndex){ //마지막 문항일 때
-   		  				/* document.getElementById("backAndmultiBtn").innerHTML += '<form name="send" action="resultAction.jsp" method="post">';
-		  				document.getElementById("backAndmultiBtn").innerHTML += '<input type="hidden" name="choiceArray" value="">';
-		  				document.getElementById("backAndmultiBtn").innerHTML += '<input class="resultSubmitBtn" type="submit" value="send">';
-		  				document.getElementById("backAndmultiBtn").innerHTML += '</form>'; */
-		  				/* gameOverHtml = "<button id=\"backBtn\"><span>이전 문항</span></button>";
-		  				gameOverHtml +='<form name ="send" action="resultAction.jsp" method = "post">';
-		        		gameOverHtml +='<input type ="hidden" name="choiceArray" value="">';
-		        		gameOverHtml +='<button type="button" class="resultSubmitBtn" name="sbm" id="sbm" value="choiceArr"><span>제출하기</span></button>';
-		        		gameOverHtml +='</form>'; */
-		        		//gameOverHtml +='<input class="resultSubmitBtn" type ="submit" value="send">';  
+   		  			if(questionIndex === finalIndex){ //마지막 문항일 때 
 		        		var gameOverHtml = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
 		        		gameOverHtml += "<button class=\"resultSubmitBtn\" id=\"toResult\"><span class=\"spanClass\">끝내기</span></button>"; 
 		        		document.getElementById("backAndmultiBtn").innerHTML = gameOverHtml;
@@ -345,6 +327,7 @@ var finalIndex = 0;
 				document.getElementById("buttons").innerHTML = surveyHTML;
 				
 				guess("btn0", 0); */
+				
 				// 동환 부분 시작
 		         var surveyHTML = " ";
 		            //surveyHTML += '<form method="post" action="surveyResult.jsp">';
@@ -358,6 +341,7 @@ var finalIndex = 0;
 		         document.getElementById("buttons").innerHTML = surveyHTML;
 		         //s_guess("btn0", 0);
 		         //동환 끝
+		         
 				 if(questionIndex != 1){
 					document.getElementById("backAndmultiBtn").innerHTML = "<button id=\"backBtn\"><span class=\"spanClass\">이전 문항</span></button>";
 				 }
@@ -458,6 +442,7 @@ var finalIndex = 0;
    			if(questionIndex === finalIndex){
    			
    				var button = document.getElementById(id);
+   			
    				var nStart = new Date().getTime(); 
 
    				button.onclick = function() {
@@ -489,29 +474,62 @@ var finalIndex = 0;
    	     	 	}
    			}
    			else{
-   		  		var button = document.getElementById(id);
+   		  		var button;
+   		  		var etcButton;
    		  		var nStart = new Date().getTime(); 
-   	   
-   		 		 button.onclick = function() {
-   		 			var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
-   		 			var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
-   		 			
-   		 			
-   					if(choiceArray.length > questionIndex || choiceArray.length === questionIndex){
-   					  choiceArray[questionIndex - 1] = idx; 
-   					  responseTimeArray[questionIndex - 1] = nDiff + "ms";
-   		 	 		}
-   		  			else{
-   					  score = score + idx;
-   					  choiceArray.push(idx);
-   					  responseTimeArray.push(nDiff + "ms");
-   		  			}
-   		  			questionIndex++;
-   			 
-   		 			//alert("popul");
-   					//alert(nDiff + "ms");
-   		   			 populate();
-   		 		 }
+   		  		
+   		  		//
+   				var spanDetail = document.getElementById('choice' + idx).innerHTML;
+   				//alert(spanDetail); 잘 나옴
+   				if(spanDetail === "기타"){
+   					etcButton = document.getElementById(id);
+   					
+   					etcButton.onclick = function(){ //기타 버튼
+   		   				
+   	   					this.style.backgroundColor = "#57636e";
+   	   					var etcHTML = '<div class="form-group">';
+   	   		        	etcHTML += '<input type="text" id="input" class="form-control" placeholder="기타" NAME="'+questions[questionIndex-1].num+'" maxlength="50">';
+   	   		         	etcHTML += '</div>';
+   	   		         	document.getElementById("buttons").innerHTML += etcHTML;
+   	   		         	document.getElementById("backAndmultiBtn").innerHTML += '<button id=\"SAnextBtn\" ><span class=\"spanClass\">다음 문항</span></button>';
+   					 	
+   	   		         
+   	   		         	
+   	   		    		//기타 버튼을 선택해서 주관식 창이 나타나더라도 다른 버튼(뒤로가기 버튼 포함) 선택하면 바로 다음 문항으로 넘어갈 수 있게함
+   	   		     		for(var i = 0; i < questions[questionIndex-1].scale; i++){ 
+ 		  					if(0 === questions[questionIndex-1].multiple){
+ 		  						guess("btn" + i, i);
+ 		  					}
+ 		  				}
+                  		backButton();
+                  		
+                  		s_guess("SAnextBtn", 0);
+   	   				}
+   				}
+   				else{
+   					button = document.getElementById(id);
+   					
+   					button.onclick = function() {
+   	   		 			var nEnd =  new Date().getTime();      //종료시간 체크(단위 ms)
+   	   		 			var nDiff = nEnd - nStart;      //두 시간차 계산(단위 ms)
+   	   		 			
+   	   		 			
+   	   					if(choiceArray.length > questionIndex || choiceArray.length === questionIndex){
+   	   					  choiceArray[questionIndex - 1] = idx; 
+   	   					  responseTimeArray[questionIndex - 1] = nDiff + "ms";
+   	   		 	 		}
+   	   		  			else{
+   	   					  score = score + idx;
+   	   					  choiceArray.push(idx);
+   	   					  responseTimeArray.push(nDiff + "ms");
+   	   		  			}
+   	   		  			questionIndex++;
+   	   			 
+   	   		 			//alert("popul");
+   	   					//alert(nDiff + "ms");
+   	   		   			 populate();
+   	   		 		 }
+   				}
    			}
    		}
    		
