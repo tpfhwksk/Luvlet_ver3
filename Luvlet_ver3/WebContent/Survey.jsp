@@ -208,7 +208,6 @@ var finalIndex = 0;
    			*/
    			//alert(quiz.questionIndex);
    			finalIsClicked = 0;
-   			
    			var x=1;
    			var summ = questionIndex-x;
    		  if(questions.length === summ){
@@ -228,34 +227,59 @@ var finalIndex = 0;
    		    if(questions[questionIndex-1].type === 0){ //객관식
    		  		var detailList = questions[questionIndex-1].detail.split(',');
    		  		var surveyHTML = " ";
+   		  		var check = 0;
+   		  		
    		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
-   		  			if(1 === questions[questionIndex-1].multiple){
-   		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span class=\"spanClass\" id=\"choice" + i + "\"></span></button>";
-   		  			}
-   		  			else{
-   		  				surveyHTML += "<button id=\"btn" + i + "\" width =(100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
-   		  			}
+   		  		  if(detailList.length === questions[questionIndex-1].scale && detailList[i].length > 14){
+                      check = 1;
+   		  		  }
    		  		}
+   		  		
+   		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
+		  			if(1 === questions[questionIndex-1].multiple){
+		  				surveyHTML += "<button id=\"btn" + i + "\" name=\"" + i +"\" width = (100/questions[questionIndex-1].scale)%><span class=\"spanClass\" id=\"choice" + i + "\"></span></button>";
+		  			}
+		  			else{
+		  				surveyHTML += "<button id=\"btn" + i + "\" width =(100/questions[questionIndex-1].scale)%><span id=\"choice" + i + "\"></span></button>";
+		  			}
+		  		}
    		  		document.getElementById("buttons").innerHTML = surveyHTML;
    		  		//document.getElementById("buttons").innerHTML += "<p float=left;>전혀 아니다</p>";
    		  		
+   		  		
    		  		for(var i = 0; i < questions[questionIndex-1].scale; i++){
    		  			if(questions[questionIndex-1].multiple === 0){ //한개만 선택가능 (버튼 일자로 나열)
-   		  			 	if(questions[questionIndex-1].scale > 10){
+   		  			 	if(questions[questionIndex-1].scale > 11){
                         	 var tmpBtn = document.getElementById('btn' + i);
-                      		 tmpBtn.style.width = 100 / 6  + '%';
+                      		 tmpBtn.style.width = 100 / 5  + '%';
+                      		 if(check === 1)
+                             {
+                                alert(detailList[i]);
+                                tmpBtn.style.width = 100 / 2  + '%';
+                             
+                             }
                       	}
    		  			 	else{
    		  			 		var tmpBtn = document.getElementById('btn' + i);
    		  					tmpBtn.style.width = 100 / (questions[questionIndex-1].scale + 1)  + '%';
+   		  					if(check === 1)
+                        	{
+                         		tmpBtn.style.width = 100 / 2  + '%';
+                         	}
+
    		  			 	}
    		  			}
    		  			else{ // 중복 선택(버튼 일자로 굳이 안해도 됨)
    		  				var tmpBtn = document.getElementById('btn' + i);
 		  				tmpBtn.style.width = 120  + 'px';
+		  				if(check === 1)
+                    	{
+                     		tmpBtn.style.width = 100 / 2  + '%';
+                     	}
    		  			}
    		  		}
+   		  		
    		  		
    		  		if(detailList.length === questions[questionIndex-1].scale) {
    		  			for(var i = 0; i < questions[questionIndex-1].scale; i++){
